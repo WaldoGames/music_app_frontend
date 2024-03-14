@@ -1,9 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
-import Navbar from './Components/Navbar';
+import Navbar from './components/Navbar';
 import {Route, Routes} from 'react-router-dom';
-import Home from './Components/Home';
-import Artists from './Components/Artists';
+import Home from './components/Home';
+import Artists from './components/Artists';
 
 function App() {
   return (
