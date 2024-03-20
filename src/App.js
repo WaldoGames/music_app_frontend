@@ -1,9 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
-import Navbar from './components/Navbar';
+import Navbar from './Components/Navbar';
 import {Route, Routes} from 'react-router-dom';
-import Home from './components/Home';
-import Artists from './components/Artists';
+import Home from './Components/Home';
+import Artists from './Components/Artists';
+import Songs from './Components/Songs';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home/>}/>
         <Route path="/artists" element={<Artists/>}/>
+        <Route path="/songs" element={<Songs/>}/>
       </Routes>
     </div>
     </>
