@@ -1,5 +1,5 @@
 import React, { Component,useEffect,useState } from 'react';
-
+import { Button, Row, Col, Container } from 'react-bootstrap';
 class Artists extends Component {
     
     
@@ -7,7 +7,9 @@ class Artists extends Component {
     render() {
         return (
             <div>
-                <ArtistsList/>
+                <Container className='mt-2'>
+                  <ArtistsList/>
+                </Container>
             </div>
         );
     }
@@ -20,7 +22,7 @@ function ArtistsList(){
     useEffect(() => {
 
         async function LoadArtistList(){
-        const response = ((await fetch('https://localhost:7237/getArtists?ShowId=1')));
+        const response = ((await fetch('https://localhost:7237/Artist?show=1')));
         const jsonData = await response.json();
         let tmpdate=JSON.parse(JSON.stringify(jsonData))
         await setfirst(tmpdate);
@@ -31,15 +33,14 @@ function ArtistsList(){
     
 
     return     <>
-    <ul>
     {first.map(function(data) {
       return (
-        <li key={data.key}>
-          artist name:  {data.name}
-        </li>
+
+        <Row >
+          <Col xs={6}>Artist name: {data.name}</Col>
+        </Row>
       )
     })}
-    </ul>
     </>
 }
 
