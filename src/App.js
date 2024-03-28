@@ -7,6 +7,7 @@ import Artists from './Components/Artists';
 import Songs from './Components/Songs';
 import "bootstrap/dist/css/bootstrap.min.css"
 import NewArtist from './Components/NewArtist';
+import NewSong from './Components/NewSong';
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
     <div>
       <Routes>
         <Route path="/" element={<Home/>}/>
-        <Route path="/artists" element={<NewArtist/>}/>
+        <Route path="/artists" element={<NewSong/>}/>
         <Route path="/songs" element={<Songs/>}/>
       </Routes>
     </div>
