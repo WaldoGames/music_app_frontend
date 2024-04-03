@@ -48,7 +48,7 @@ class NewArtist extends Component {
 
   render() {
     return (
-    <div className='m-2 form-group'>
+    <div className='form-group'>
       <Form onSubmit={this.handleSubmit}>
         <Form.Group controlId="artistName">
           <Form.Label>Artist Name</Form.Label>

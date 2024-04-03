@@ -1,10 +1,13 @@
 import React, { Component,useEffect,useState } from 'react';
 import { Button, Row, Col, Container } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 class Songs extends Component {
     render() {
         return (
-          <Container>
+          <Container className='mt-2'>
+            <Button className='btn-primary' as={Link}
+      to="/songs/new">add new song</Button>
             <SongList/>
           </Container>
         );

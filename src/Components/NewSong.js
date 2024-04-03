@@ -4,11 +4,20 @@ import { Form, Button } from 'react-bootstrap';
 import Select from 'react-select';
 
 import AsyncSelect from 'react-select/async';
+import NewArtist from './NewArtist';
 
 export default class NewSong extends Component {
   render() {
     return (
-      <NewSongForm className="m-2" />
+      <div className='m-3'>
+      <NewSongForm />
+        <div  className=" mt-5">
+        <p class="text-muted">   
+           can't find the artist your looking for? add a new one here:
+        </p>
+        <NewArtist class="m-2" />
+        </div>
+      </div>
     )
   }
 }
@@ -30,16 +39,18 @@ function NewSongForm() {
                 return;
               }
           const response = await fetch(`https://localhost:7237/Artist/search?search=${inputValue}`);
-          
+          //TODO: check for empty or error
           const data = await response.json();
           console.log(data);
           if(data==null){
             return;
           }
           const options = data.map(artist => ({
-            value: artist.id,
+            key: artist.key,
+            value: artist.key,
             label: artist.name
           }));
+          console.log(options);
           callback(options);
         } catch (error) {
           console.error('Error loading options:', error);
@@ -50,26 +61,31 @@ function NewSongForm() {
     const onSubmit = async (data) => {
       //try {
 
-        /*//alert(data.firstName)
-        // Your asynchronous logic here, for example:
+      try {
+        // Perform POST request
         const response = await fetch('https://localhost:7237/Song', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ artistName: data.artistName}),
+          body: JSON.stringify({ name: data.songName, user_description: data.discription, creatorIds: data.artists, release_date: data.releaseDate, showId: 1}),
         });
-        const responseData = await response.json();
-        console.log('Response from server:', responseData);
-        // Reset the form after successful submission
-        reset();
+        
+        if (!response.ok) {
+          console.error('Failed to upload new artist');
+          
+        }
+        
       } catch (error) {
-        console.error('Error posting data:', error);
-      }*/
+        console.error('Error:', error);
+      } finally{
+        //this.setState({ artistName: ''});
+      }
     };
+    
   
     return (
-      <Form className='m-3' onSubmit={handleSubmit(onSubmit)}>
+      <Form className='mt-3' onSubmit={handleSubmit(onSubmit)}>
         <Form.Group controlId="songName">
           <Form.Label>Song name</Form.Label>
           <Form.Control type="text" name="songName" {...register("songName", {required: "Required", })} placeholder="Enter the song name" />
@@ -105,7 +121,7 @@ function NewSongForm() {
       </Form.Group>
 
 
-        <Button variant="primary" type="submit">
+        <Button variant="primary" type="submit" className='mt-2'>
           Submit
         </Button>
       </Form>
