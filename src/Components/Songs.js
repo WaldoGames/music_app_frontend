@@ -1,8 +1,10 @@
 import React, { Component,useEffect,useState } from 'react';
 import { Button, Row, Col, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { useAuth0 } from '@auth0/auth0-react';
 
 class Songs extends Component {
+  
     render() {
         return (
           <Container className='mt-2'>
@@ -60,11 +62,10 @@ function SongList(){
 }
 
 function PlaySongButton({newstate,song_id, show_id}){
-
     const onPress  = async () => {
         try {
           // Perform POST request
-          const response = await fetch('https://localhost:7237/played', {
+          const response = await fetch('https://localhost:7237/Song/played', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
