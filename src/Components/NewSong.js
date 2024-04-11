@@ -38,7 +38,7 @@ function NewSongForm() {
                 callback([]);
                 return;
               }
-          const response = await fetch(`https://localhost:7237/Artist/search?search=${inputValue}`);
+          const response = await fetch(`https://localhost:32776/Artist/search?search=${inputValue}`);
           //TODO: check for empty or error
           const data = await response.json();
           console.log(data);
@@ -63,7 +63,7 @@ function NewSongForm() {
 
       try {
         // Perform POST request
-        const response = await fetch('https://localhost:7237/Song', {
+        const response = await fetch('https://localhost:32776/Song', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

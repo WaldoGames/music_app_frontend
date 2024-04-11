@@ -24,7 +24,7 @@ function SongList(){
     }, [])
 
     async function LoadSongList(){
-      const response = ((await fetch('https://localhost:7237/Song?show=1')));
+      const response = ((await fetch('https://localhost:32776/Song?show=1')));
       const jsonData = await response.json();
       let tmpdate=JSON.parse(JSON.stringify(jsonData))
       await setSongList(tmpdate);
@@ -65,7 +65,7 @@ function PlaySongButton({newstate,song_id, show_id}){
     const onPress  = async () => {
         try {
           // Perform POST request
-          const response = await fetch('https://localhost:7237/Song/played', {
+          const response = await fetch('https://localhost:32776/Song/played', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

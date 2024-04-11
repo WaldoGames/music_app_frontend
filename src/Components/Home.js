@@ -23,7 +23,7 @@ const HomePage = () => {
         const createUserIfNotExists = async () => {
           if (isAuthenticated && user) {
             try {
-              const response = await fetch('https://localhost:7237/User/login', {
+              const response = await fetch('https://localhost:32776/User/login', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',

@@ -22,7 +22,7 @@ function ArtistsList(){
     useEffect(() => {
 
         async function LoadArtistList(){
-        const response = ((await fetch('https://localhost:7237/Artist?show=1')));
+        const response = ((await fetch('https://localhost:32776/Artist?show=1')));
         const jsonData = await response.json();
         let tmpdate=JSON.parse(JSON.stringify(jsonData))
         await setfirst(tmpdate);
