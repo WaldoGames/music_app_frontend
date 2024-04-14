@@ -23,7 +23,7 @@ class NewArtist extends Component {
     // Do whatever you want with the names here
     try {
         // Perform POST request
-        const response = await fetch('https://localhost:32776/Artist', {
+        const response = await fetch('https://localhost:32768/Artist', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

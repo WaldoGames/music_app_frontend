@@ -6,15 +6,13 @@ import { Button } from 'react-bootstrap';
 const  ShowSelector =(selectedItem, onItemSelected)=> {
     const { user, isAuthenticated, isLoading } = useAuth0();
 
-    const [shows, setShows] = useState([]);
+
 
     
 
 
     return (
-        isAuthenticated ? (
-            
-        ) : null
+        <p>je;;p</p>
     );
 }
 
