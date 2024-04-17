@@ -10,7 +10,7 @@ function Songs({ ss }) {
 
   useEffect(() => {
     LoadSongList();
-  }, []);
+  }, [selectedShow]);
 
   async function LoadSongList() {
     try {

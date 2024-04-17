@@ -7,55 +7,42 @@ const HomePage = () => {
   const { user, isAuthenticated, isLoading } = useAuth0();
   const { fetchShows, loading, showCount, shows } = useContext(ShowContext);
   const [componentToShow, setComponentToShow] = useState(null);
+  const [dataLoaded, setDataLoaded] = useState(false); // New state variable
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (isAuthenticated && user && !loading) {
-        fetchShows();
-        try {
-          const response = await fetch('https://localhost:32768/User/login', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ subId: user.sub, email: user.email }),
-          });
-          // Handle response if needed
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    };
-
+    console.log("g");
     fetchData();
-  }, [isAuthenticated, user, loading, fetchShows]);
+  }, [isAuthenticated, user]);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      setComponentToShow(<div><p>Loading2...</p></div>);
-    } else {
-
-        if (shows.length == 0) {
-          setComponentToShow(<NewShowForm Reload={reloadParent} />);
-        } else {
-          setComponentToShow(
-            <div>
-              <h2 className=' m-3'>Welcome user</h2>
-            </div>
-          );
-        }
+  const fetchData = async () => {
+    if (isAuthenticated && user) {
+      fetchShows();
+      console.log();
+      try {
+        const response = await fetch('https://localhost:32768/User/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ subId: user.sub, email: user.email }),
+        });
+      } catch (error) {
+        console.error(error);
+      }
     }
-  }, [isAuthenticated, loading, showCount]);
-
+  };
   const reloadParent = () => {
-    // Define reloadParent function here
+    fetchData();
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
 
-  return componentToShow;
+  return (!isAuthenticated||isLoading||loading) ?  (<h1>loading</h1>) : (
+    shows.length === 0 ? (<NewShowForm Reload={reloadParent} />):(
+      <div>
+        <h2 className=' m-3'>Welcome user</h2>
+      </div>
+    )
+  );
 };
 
 export default HomePage;

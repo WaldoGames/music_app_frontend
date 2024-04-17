@@ -5,21 +5,24 @@ export const ShowContext = createContext();
 
 const ShowProvider = ({ children }) => {
     const [shows, setShows] = useState([]);
+    const [showCount, SetShowCount] = useState([]);
     const [selectedShow, setSelectedShow] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const { user, isAuthenticated, isLoading } = useAuth0();
 
     const fetchShows = async () => {
-        setLoading(true);
         try {
-            
+          setLoading(true);
+          console.log("aaaaaa")
           const response = await fetch('https://localhost:32768/Show?AuthSub='+ user.sub)
           const data = await response.json();
           setShows(data)
           if (data.length > 0) {
-            setSelectedShow(data[0]); // Set the first item as active
+            setSelectedShow(data[0]); // Set the first item as active'
+            SetShowCount(data.length);
           }
+          
         } catch (error) {
             console.log(error)
           setError(error);
@@ -28,17 +31,19 @@ const ShowProvider = ({ children }) => {
         }
         
       };
-    const showCount = async()=>{
-        return shows.length;
-    }
 
   const updateActiveItem = (itemId) => {
     const selectedShow = shows.find(show => show.id === itemId);
     setSelectedShow(selectedShow);
   };
 
+  const SelectDiffrentShow= (index) =>{
+    setSelectedShow(shows[index]);
+    //TODO handel our of bound error
+  };
+
   return (
-    <ShowContext.Provider value={{ shows, selectedShow, loading, error, fetchShows, setShows,showCount }}>
+    <ShowContext.Provider value={{ shows, selectedShow, loading, error,showCount, fetchShows, setShows, SelectDiffrentShow}}>
       {children}
     </ShowContext.Provider>
   );

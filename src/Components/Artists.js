@@ -16,7 +16,7 @@ function Artists({ss}){
         }
     
         LoadArtistList();
-    }, [])
+    }, [selectedShow])
     
 
     return (
