@@ -45,6 +45,7 @@ function Songs({ ss }) {
               <Row className='mt-2'>
                 <Col>Song name: {data.name}</Col>
                 <Col>Last played: {formattedDate}</Col>
+                <Col>times played: {data.amountPlayed}</Col>
                 <Col><PlaySongButton newstate={newstate} song_id={data.key} show_id={selectedShow.id} /></Col>
               </Row>
             </Container>

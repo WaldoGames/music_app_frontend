@@ -24,6 +24,9 @@ const Navbar=()=>{
                 <li>
                     <Link to="/songs">songs</Link>
                 </li>
+                <li>
+                    <Link to="/shows">shows</Link>
+                </li>
                 {(!loading && showCount>1) &&
 
                     <li>

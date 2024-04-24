@@ -1,11 +1,17 @@
 import { useForm, Controller } from 'react-hook-form';
 import { Form, Button } from 'react-bootstrap';
 import { useAuth0 } from '@auth0/auth0-react';
+import { useNavigate } from 'react-router-dom';
+import React, { Component,useEffect,useState,useContext } from 'react';
+import { ShowContext } from './Context/ShowContext';
 
 function NewShowForm(props) {
     const { register, handleSubmit, reset, control, setValue } = useForm();
     const { user, isAuthenticated, isLoading } = useAuth0();
     const { Reload } = props;
+    const navigate = useNavigate();
+    const { fetchShows } = useContext(ShowContext);
+
 
     const onSubmit = async (data) => {
       //try {
@@ -28,7 +34,12 @@ function NewShowForm(props) {
       } catch (error) {
         console.error('Error:', error);
       }
+      fetchShows();
+      if(Reload!=null){
       Reload();
+      }else{
+        navigate('/shows')
+      }
     };
     
   

@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { Form, Button } from 'react-bootstrap';
 import Select from 'react-select';
 import { ShowContext } from './Context/ShowContext';
-
+import { useNavigate } from 'react-router-dom';
 import AsyncSelect from 'react-select/async';
 import NewArtist from './NewArtist';
 
@@ -14,6 +14,8 @@ function NewSong() {
     const [artists, setArtists] = useState([]);
     const [selectedArtists, setSelectedArtists] = useState([]);
     const { selectedShow } = useContext(ShowContext);
+
+    const navigate = useNavigate();
 
     const handleArtistChange = (selectedOptions) => {
         setSelectedArtists(selectedOptions);
@@ -29,7 +31,6 @@ function NewSong() {
           const response = await fetch(`https://localhost:32768/Artist/search?search=${inputValue}`);
           //TODO: check for empty or error
           const data = await response.json();
-          console.log(data);
           if(data==null){
             return;
           }
@@ -38,7 +39,6 @@ function NewSong() {
             value: artist.key,
             label: artist.name
           }));
-          console.log(options);
           callback(options);
         } catch (error) {
           console.error('Error loading options:', error);
@@ -67,7 +67,8 @@ function NewSong() {
       } catch (error) {
         console.error('Error:', error);
       } finally{
-        //this.setState({ artistName: ''});
+
+        navigate('/songs')
       }
     };
 

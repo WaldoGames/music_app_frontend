@@ -8,10 +8,13 @@ import Songs from './Components/Songs';
 import "bootstrap/dist/css/bootstrap.min.css"
 import NewArtist from './Components/NewArtist';
 import NewSong from './Components/NewSong';
+import Shows from './Components/Shows';
 
 import { useState,useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import ShowProvider from './Components/Context/ShowContext';
+import NewShowForm from './Components/NewShow';
+
 
 function App() {
   const { user, isAuthenticated, isLoading } = useAuth0();
@@ -26,6 +29,8 @@ function App() {
         <Route path="/artists" element={<Artists/>} />
         <Route path="/songs" element={<Songs />} />
         <Route path="/songs/new" element={<NewSong />} />
+        <Route path="/shows" element={<Shows />} />
+        <Route path="/shows/new" element={<NewShowForm/>} />
       </Routes>
     </div>
     </ShowProvider>
