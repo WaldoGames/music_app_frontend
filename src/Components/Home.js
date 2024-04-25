@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import NewShowForm from './NewShow';
+import LoadingOrNotloggedin from './LoadingOrNotloggedin';
 import { ShowContext } from './Context/ShowContext';
 
 const HomePage = () => {
@@ -36,7 +37,7 @@ const HomePage = () => {
   };
 
 
-  return (!isAuthenticated||isLoading||loading) ?  (<h1>loading</h1>) : (
+  return (!isAuthenticated||isLoading||loading) ?  (<LoadingOrNotloggedin/>) : (
     shows.length === 0 ? (<NewShowForm Reload={reloadParent} />):(
       <div>
         <h2 className=' m-3'>Welcome user</h2>

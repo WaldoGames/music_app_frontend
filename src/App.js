@@ -8,6 +8,7 @@ import Songs from './Components/Songs';
 import "bootstrap/dist/css/bootstrap.min.css"
 import NewArtist from './Components/NewArtist';
 import NewSong from './Components/NewSong';
+import UpdateSong from './Components/UpdateSong';
 import Shows from './Components/Shows';
 
 import { useState,useEffect } from 'react';
@@ -31,6 +32,7 @@ function App() {
         <Route path="/songs/new" element={<NewSong />} />
         <Route path="/shows" element={<Shows />} />
         <Route path="/shows/new" element={<NewShowForm/>} />
+        <Route path="/songs/edit/:id" element={<UpdateSong />} />
       </Routes>
     </div>
     </ShowProvider>

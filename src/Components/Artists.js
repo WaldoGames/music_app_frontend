@@ -27,6 +27,7 @@ function Artists({ss}){
               <Container className='mt-2'>
                 <Row>
                   <Col xs={6}>Artist name: {data.name}</Col>
+                  <Col xs={6}>has been played {data.playedCount} times</Col>
                 </Row>
               </Container>
             );

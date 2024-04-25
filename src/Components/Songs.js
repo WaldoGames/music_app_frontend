@@ -15,7 +15,7 @@ function Songs({ ss }) {
   async function LoadSongList() {
     try {
       console.log(selectedShow.id);
-      const response = await fetch('https://localhost:32768/Song?show=' + selectedShow.id);
+      const response = await fetch('https://localhost:32768/Song/fromshow?show=' + selectedShow.id);
       const jsonData = await response.json();
       setSongList(jsonData);
     } catch (error) {
