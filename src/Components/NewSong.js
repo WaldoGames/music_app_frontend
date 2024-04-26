@@ -60,7 +60,7 @@ function NewSong() {
         });
         
         if (!response.ok) {
-          console.error('Failed to upload new artist');
+          console.error('Failed to upload new song');
           
         }
         

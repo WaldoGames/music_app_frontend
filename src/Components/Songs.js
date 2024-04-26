@@ -47,6 +47,7 @@ function Songs({ ss }) {
                 <Col>Last played: {formattedDate}</Col>
                 <Col>times played: {data.amountPlayed}</Col>
                 <Col><PlaySongButton newstate={newstate} song_id={data.key} show_id={selectedShow.id} /></Col>
+                <Col><Link to={"/songs/edit/"+data.key}>Edit</Link></Col>
               </Row>
             </Container>
           );

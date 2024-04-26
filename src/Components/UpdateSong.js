@@ -44,7 +44,7 @@ function UpdateSong() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://localhost:32768/song/${id}`);
+        const response = await fetch(`https://localhost:32768/song/${id}/show/${selectedShow.id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch song');
         }
@@ -52,15 +52,16 @@ function UpdateSong() {
         // Pre-fill the form with existing song data
         setValue('songName', data.name);
         setValue('discription', data.user_description);
-        setValue('releaseDate', data.release_date);
+        setValue('releaseDate', data.release_date.substr(0, 10));
         // Set selected artists
-        const selectedArtists = data.artists.map((artist) => ({
-          key: artist.key,
-          value: artist.key,
+        const selectedArtistsMaped = data.artists.map((artist) => ({
+          key: artist.id,
+          value: artist.id,
           label: artist.name,
         }));
-        setSelectedArtists(selectedArtists);
-        setValue('artists', selectedArtists.map((artist) => artist.value));
+        console.log(data);
+        setSelectedArtists(selectedArtistsMaped);
+        setValue('artists', selectedArtistsMaped.map((artist) => artist.value));
       } catch (error) {
         console.error('Error:', error);
       }
@@ -71,21 +72,29 @@ function UpdateSong() {
   const onSubmit = async (data) => {
     try {
       // Perform PUT request
-      const response = await fetch(`https://localhost:32768/Song/${id}`, {
+      const response = await fetch(`https://localhost:32768/Song`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          id: id,
           name: data.songName,
           user_description: data.discription,
-          creatorIds: data.artists,
+          creatorIds: selectedArtists.map(artist => artist.key),
           release_date: data.releaseDate,
           showId: selectedShow.id,
         }),
       });
       if (!response.ok) {
-        console.error('Failed to update song');
+        console.error(JSON.stringify({
+          id: id,
+          name: data.songName,
+          user_description: data.discription,
+          creatorIds: selectedArtists.map(artist => artist.key),
+          release_date: data.releaseDate,
+          showId: selectedShow.id,
+        }));
       }
     } catch (error) {
       console.error('Error:', error);
