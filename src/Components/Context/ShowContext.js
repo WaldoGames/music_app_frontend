@@ -15,7 +15,7 @@ const ShowProvider = ({ children }) => {
         try {
           setLoading(true);
           console.log("aaaaaa")
-          const response = await fetch('https://localhost:32768/Show?AuthSub='+ user.sub)
+          const response = await fetch('https://localhost:32770/Show?AuthSub='+ user.sub)
           const data = await response.json();
           setShows(data)
           if (data.length > 0) {

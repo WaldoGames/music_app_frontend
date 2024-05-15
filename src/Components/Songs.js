@@ -15,7 +15,7 @@ function Songs({ ss }) {
   async function LoadSongList() {
     try {
       console.log(selectedShow.id);
-      const response = await fetch('https://localhost:32768/Song/fromshow?show=' + selectedShow.id);
+      const response = await fetch('https://localhost:32770/Song/fromshow?show=' + selectedShow.id);
       const jsonData = await response.json();
       setSongList(jsonData);
     } catch (error) {
@@ -62,7 +62,7 @@ function PlaySongButton({newstate,song_id, show_id}){
   const onPress  = async () => {
       try {
         // Perform POST request
-        const response = await fetch('https://localhost:32768/Song/played', {
+        const response = await fetch('https://localhost:32770/Song/played', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

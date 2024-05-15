@@ -26,7 +26,7 @@ function UpdateSong() {
         return;
       }
       const response = await fetch(
-        `https://localhost:32768/Artist/search?search=${inputValue}`
+        `https://localhost:32770/Artist/search?search=${inputValue}`
       );
       const data = await response.json();
       const options = data.map((artist) => ({
@@ -44,7 +44,7 @@ function UpdateSong() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://localhost:32768/song/${id}/show/${selectedShow.id}`);
+        const response = await fetch(`https://localhost:32770/song/${id}/show/${selectedShow.id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch song');
         }
@@ -72,7 +72,7 @@ function UpdateSong() {
   const onSubmit = async (data) => {
     try {
       // Perform PUT request
-      const response = await fetch(`https://localhost:32768/Song`, {
+      const response = await fetch(`https://localhost:32770/Song`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

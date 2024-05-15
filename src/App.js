@@ -10,6 +10,7 @@ import NewArtist from './Components/NewArtist';
 import NewSong from './Components/NewSong';
 import UpdateSong from './Components/UpdateSong';
 import Shows from './Components/Shows';
+import Playlists from './Components/Playlists'
 
 import { useState,useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -27,6 +28,7 @@ function App() {
     <Routes>
     
         <Route path="/" element={<HomePage/>} />
+        <Route path="/playlists" element={<Playlists/>} />
         <Route path="/artists" element={<Artists/>} />
         <Route path="/songs" element={<Songs />} />
         <Route path="/songs/new" element={<NewSong />} />
