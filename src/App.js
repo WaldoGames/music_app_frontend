@@ -11,7 +11,7 @@ import NewSong from './Components/NewSong';
 import UpdateSong from './Components/UpdateSong';
 import Shows from './Components/Shows';
 import Playlists from './Components/Playlists'
-
+import MyForm from './Components/NewPlaylist'
 import { useState,useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import ShowProvider from './Components/Context/ShowContext';
@@ -28,7 +28,7 @@ function App() {
     <Routes>
     
         <Route path="/" element={<HomePage/>} />
-        <Route path="/playlists" element={<Playlists/>} />
+        <Route path="/playlists" element={<MyForm/>} />
         <Route path="/artists" element={<Artists/>} />
         <Route path="/songs" element={<Songs />} />
         <Route path="/songs/new" element={<NewSong />} />

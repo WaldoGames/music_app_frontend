@@ -18,7 +18,7 @@ function NewShowForm(props) {
 
       try {
         // Perform POST request
-        const response = await fetch('https://localhost:32770/Show', {
+        const response = await fetch('https://localhost:32768/Show', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

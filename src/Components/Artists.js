@@ -9,7 +9,7 @@ function Artists({ss}){
     useEffect(() => {
 
         async function LoadArtistList(){
-        const response = await fetch('https://localhost:32770/Artist?show='+ selectedShow.id);
+        const response = await fetch('https://localhost:32768/Artist?show='+ selectedShow.id);
         const jsonData = await response.json();
         let tmpdate=JSON.parse(JSON.stringify(jsonData))
         await setfirst(tmpdate);

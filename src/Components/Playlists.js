@@ -10,7 +10,7 @@ function Playlists({ss}){
     useEffect(() => {
 
         async function LoadPlaylists(){
-        const response = await fetch('https://localhost:32770/Playlist?show='+ selectedShow.id);
+        const response = await fetch('https://localhost:32768/Playlist?show='+ selectedShow.id);
         const jsonData = await response.json();
         let tmpdate=JSON.parse(JSON.stringify(jsonData))
         await setPlaylist(tmpdate);
