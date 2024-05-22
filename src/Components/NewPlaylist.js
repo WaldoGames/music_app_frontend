@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
+import { ShowContext } from './Context/ShowContext';
+import { Controller, useForm } from 'react-hook-form';
+import AsyncSelect from 'react-select/async';
+import { useNavigate } from 'react-router-dom';
 
-const ReorderableForm = ({ name, description, onNameChange, onDescriptionChange }) => {
-  const [items, setItems] = useState([
-    { id: 1, description: 'Description 1', song: null },
-    { id: 2, description: 'Description 2', song: null },
-    { id: 3, description: 'Description 3', song: null },
-    { id: 4, description: 'Description 4', song: null }
-  ]);
+const Api = process.env.REACT_APP_API_PATH;
+
+const PlayListItemsForm = ({ name, description, onNameChange, onDescriptionChange }) => {
+  const { selectedShow } = useContext(ShowContext);
+  const [items, setItems] = useState([ ]);
+  const { user } = useAuth0();
   const [newDescription, setNewDescription] = useState('');
-  const [selectedSong, setSelectedSong] = useState('');
+  const { control, setValue } = useForm();
+  const navigate = useNavigate();
 
   const moveItem = (fromIndex, toIndex) => {
     const newItems = [...items];
@@ -29,22 +34,77 @@ const ReorderableForm = ({ name, description, onNameChange, onDescriptionChange 
 
   const handleAddItem = () => {
     if (newDescription.trim() !== '') {
-      setItems([...items, { id: items.length + 1, description: newDescription.trim(), song: selectedSong }]);
+      setItems([...items, { id: items.length + 1, description: newDescription.trim(), song: null }]);
       setNewDescription('');
-      setSelectedSong('');
     }
   };
 
-  const handlePrintData = () => {
+  const Submit = async () => {
+    const itemsWithOrderIndex = items.map((item, index) => ({
+      ...item,
+      orderIndex: index + 1,
+      playlistItemSongId: item.song ? item.song.value : null // Print song ID instead of name
+    }));
+
+    try {
+      // Perform POST request
+      const response = await fetch(Api+'/Playlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({       
+          recordingPlayListName: name,
+          playListDescription: description,
+          showId: selectedShow.id,
+          playlistItems: itemsWithOrderIndex,}),
+      });
+      
+      if (!response.ok) {
+        console.error(response);
+        
+      }
+      
+    } catch (error) {
+      console.error('Error:', error);
+    } finally{
+      navigate('/playlists')
+    }
     console.log({
-      name,
-      description,
-      items
+      recordingPlayListName: name,
+      playListDescription: description,
+      showId: selectedShow.id,
+      playlistItems: itemsWithOrderIndex,
     });
   };
 
+  const loadOptions = async (inputValue) => {
+    // Replace this with actual API call
+    if(inputValue=="") return;
+    const response = await fetch(`${Api}/Song/search?search=${inputValue}`);
+    const songs = await response.json();
+    return songs.map(song => ({ value: song.id, label: song.name }));
+  };
+
+  const handleSongChange = (selectedSong, index) => {
+    const newItems = [...items];
+    newItems[index].song = selectedSong;
+    setItems(newItems);
+  };
+
+  const styles = {
+    container: { maxWidth: '500px', margin: 'auto' },
+    input: { width: '100%', marginBottom: '10px', boxSizing: 'border-box' },
+    textarea: { width: '100%', height: '100px', marginBottom: '10px', boxSizing: 'border-box' },
+    itemContainer: { marginBottom: '10px', display: 'flex', alignItems: 'center' },
+    itemInput: { flex: 1, marginRight: '10px' },
+    itemSelect: { flex: 1, marginRight: '10px' },
+    addItemContainer: { display: 'flex', marginBottom: '10px' },
+    button: { marginRight: '10px' }
+  };
+
   return (
-    <div style={{ maxWidth: '400px', margin: 'auto' }}>
+    <div style={styles.container}>
       <h2>Reorderable Form</h2>
       <div style={{ marginBottom: '10px' }}>
         <input
@@ -52,17 +112,17 @@ const ReorderableForm = ({ name, description, onNameChange, onDescriptionChange 
           value={name}
           onChange={(e) => onNameChange(e.target.value)}
           placeholder="Name"
-          style={{ width: '100%', marginBottom: '10px' }}
+          style={styles.input}
         />
         <textarea
           value={description}
           onChange={(e) => onDescriptionChange(e.target.value)}
           placeholder="Description"
-          style={{ width: '100%', height: '100px' }}
+          style={styles.textarea}
         />
       </div>
       {items.map((item, index) => (
-        <div key={item.id} style={{ marginBottom: '10px', display: 'flex', alignItems: 'center' }}>
+        <div key={item.id} style={styles.itemContainer}>
           <input
             type="text"
             value={item.description}
@@ -72,50 +132,38 @@ const ReorderableForm = ({ name, description, onNameChange, onDescriptionChange 
               newItems[index].description = newDescription;
               setItems(newItems);
             }}
-            style={{ flex: 1, marginRight: '10px' }}
+            style={styles.itemInput}
           />
-          <select
-            value={item.song || ''}
-            onChange={(e) => {
-              const selectedSong = e.target.value === 'null' ? null : e.target.value;
-              const newItems = [...items];
-              newItems[index].song = selectedSong;
-              setItems(newItems);
-            }}
-            style={{ marginRight: '10px' }}
-          >
-            <option value="null">Select Song</option>
-            <option value="song1">Song 1</option>
-            <option value="song2">Song 2</option>
-            <option value="song3">Song 3</option>
-            {/* Add more songs here */}
-          </select>
-          <button onClick={() => handleMoveUp(index)} disabled={index === 0}>↑</button>
-          <button onClick={() => handleMoveDown(index)} disabled={index === items.length - 1}>↓</button>
+          <Controller
+            name={`song-${index}`}
+            control={control}
+            render={({ value }) => (
+              <AsyncSelect
+                cacheOptions
+                defaultOptions
+                loadOptions={loadOptions}
+                value={item.song}
+                onChange={(selectedSong) => handleSongChange(selectedSong, index)}
+                placeholder="Select song"
+                styles={{ container: (base) => ({ ...base, flex: 1 }) }}
+              />
+            )}
+          />
+          <button onClick={() => handleMoveUp(index)} disabled={index === 0} style={styles.button}>↑</button>
+          <button onClick={() => handleMoveDown(index)} disabled={index === items.length - 1} style={styles.button}>↓</button>
         </div>
       ))}
-      <div style={{ display: 'flex', marginBottom: '10px' }}>
+      <div style={styles.addItemContainer}>
         <input
           type="text"
           value={newDescription}
           onChange={(e) => setNewDescription(e.target.value)}
           placeholder="New Description"
-          style={{ flex: 1, marginRight: '10px' }}
+          style={styles.itemInput}
         />
-        <select
-          value={selectedSong}
-          onChange={(e) => setSelectedSong(e.target.value)}
-          style={{ marginRight: '10px' }}
-        >
-          <option value="null">Select Song</option>
-          <option value="song1">Song 1</option>
-          <option value="song2">Song 2</option>
-          <option value="song3">Song 3</option>
-          {/* Add more songs here */}
-        </select>
-        <button onClick={handleAddItem}>Add Item</button>
+        <button onClick={handleAddItem} style={styles.button}>Add Item</button>
       </div>
-      <button onClick={handlePrintData}>Print Data</button>
+      <button onClick={Submit}>Print Data</button>
     </div>
   );
 };
@@ -126,7 +174,7 @@ const PlaylistForm = () => {
 
   return (
     <div style={{ maxWidth: '600px', margin: 'auto', padding: '20px' }}>
-      <ReorderableForm
+      <PlayListItemsForm
         name={name}
         description={description}
         onNameChange={setName}

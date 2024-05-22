@@ -11,14 +11,14 @@ function NewShowForm(props) {
     const { Reload } = props;
     const navigate = useNavigate();
     const { fetchShows } = useContext(ShowContext);
-
+    const Api = process.env.REACT_APP_API_PATH
 
     const onSubmit = async (data) => {
       //try {
 
       try {
         // Perform POST request
-        const response = await fetch('https://localhost:32768/Show', {
+        const response = await fetch(Api+'/Show', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

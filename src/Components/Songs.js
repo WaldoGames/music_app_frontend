@@ -7,7 +7,6 @@ import { ShowContext } from './Context/ShowContext';
 function Songs({ ss }) {
   const [songList, setSongList] = useState([]);
   const { selectedShow } = useContext(ShowContext);
-
   useEffect(() => {
     LoadSongList();
   }, [selectedShow]);
@@ -59,10 +58,12 @@ function Songs({ ss }) {
   );
 }
 function PlaySongButton({newstate,song_id, show_id}){
+  const Api = process.env.REACT_APP_API_PATH
+
   const onPress  = async () => {
       try {
         // Perform POST request
-        const response = await fetch('https://localhost:32768/Song/played', {
+        const response = await fetch(Api+'/Song/played', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

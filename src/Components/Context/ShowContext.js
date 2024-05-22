@@ -10,6 +10,7 @@ const ShowProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const { user, isAuthenticated, isLoading } = useAuth0();
+    const Api = process.env.REACT_APP_API_PATH
 
     useEffect(() => {
       if(isAuthenticated){
@@ -18,10 +19,11 @@ const ShowProvider = ({ children }) => {
     }, [isAuthenticated, isLoading])
 
     const fetchShows = async () => {
+      console.log(Api)
         try {
           setLoading(true);
           console.log("aaaaaa")
-          const response = await fetch('https://localhost:32768/Show?AuthSub='+ user.sub)
+          const response = await fetch(Api+'/Show?AuthSub='+ user.sub)
           const data = await response.json();
           setShows(data)
           if (data.length > 0) {

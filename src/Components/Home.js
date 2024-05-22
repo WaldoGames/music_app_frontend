@@ -9,18 +9,17 @@ const HomePage = () => {
   const { fetchShows, loading, showCount, shows } = useContext(ShowContext);
   const [componentToShow, setComponentToShow] = useState(null);
   const [dataLoaded, setDataLoaded] = useState(false); // New state variable
-
+  const Api = process.env.REACT_APP_API_PATH
   useEffect(() => {
-    console.log("g");
     fetchData();
   }, [isAuthenticated, user]);
 
   const fetchData = async () => {
     if (isAuthenticated && user) {
       fetchShows();
-      console.log();
+      console.log(Api);
       try {
-        const response = await fetch('https://localhost:32768/User/login', {
+        const response = await fetch(Api+'/User/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

@@ -7,12 +7,14 @@ import { ShowContext } from './Context/ShowContext';
 import { useNavigate, useParams } from 'react-router-dom';
 
 function UpdateSong() {
+  
   const { register, handleSubmit, control, setValue } = useForm();
   const [artists, setArtists] = useState([]);
   const [selectedArtists, setSelectedArtists] = useState([]);
   const { selectedShow } = useContext(ShowContext);
   const navigate = useNavigate();
   const { id } = useParams();
+  const Api = process.env.REACT_APP_API_PATH
 
   const handleArtistChange = (selectedOptions) => {
     setSelectedArtists(selectedOptions);
@@ -26,7 +28,7 @@ function UpdateSong() {
         return;
       }
       const response = await fetch(
-        `https://localhost:32768/Artist/search?search=${inputValue}`
+        Api + `/Artist/search?search=${inputValue}`
       );
       const data = await response.json();
       const options = data.map((artist) => ({
@@ -44,7 +46,7 @@ function UpdateSong() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://localhost:32768/song/${id}/show/${selectedShow.id}`);
+        const response = await fetch(Api+`/song/${id}/show/${selectedShow.id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch song');
         }
@@ -72,7 +74,7 @@ function UpdateSong() {
   const onSubmit = async (data) => {
     try {
       // Perform PUT request
-      const response = await fetch(`https://localhost:32768/Song`, {
+      const response = await fetch(Api+`/Song`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

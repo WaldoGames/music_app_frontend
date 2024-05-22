@@ -12,18 +12,19 @@ class NewArtist extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-
+  
   handleChange(event) {
     const { name, value } = event.target;
     this.setState({ [name]: value });
   }
 
   async handleSubmit(event) {
+    const Api = process.env.REACT_APP_API_PATH
     event.preventDefault();
     // Do whatever you want with the names here
     try {
         // Perform POST request
-        const response = await fetch('https://localhost:32768/Artist', {
+        const response = await fetch(Api+'/Artist', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
