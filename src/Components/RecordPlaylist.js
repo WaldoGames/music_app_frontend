@@ -1,43 +1,79 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
-
-import { ShowContext } from './Context/ShowContext';
-
+import React, { useEffect, useState } from 'react';
+import * as signalR from '@microsoft/signalr';
+import { useParams } from 'react-router-dom';
 const RecordPlaylist = () => {
-    const [messages, setMessages] = useState([]);
-    const [input, setInput] = useState('');
-    const [websocket, setWebsocket] = useState(null);
-    const WebsocketPath = process.env.REACT_APP_API_PATH
+  const [connection, setConnection] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [message, setMessage] = useState('');
+  const [user, setUser] = useState('');
 
-    useEffect(() => {
-        console.log(WebsocketPath);
-      const ws = new WebSocket(WebsocketPath+'/ws');
-      setWebsocket(ws);
-  
-      ws.onopen = () => {
-        console.log('WebSocket connection opened');
-      };
-  
-      ws.onmessage = (event) => {
-        setMessages((prevMessages) => [...prevMessages, event.data]);
-        console.log(event.data);
-      };
-  
-      ws.onclose = () => {
-        console.log('WebSocket connection closed');
-      };
-  
-      return () => {
-        ws.close();
-      };
-    }, []);
-  
-    const sendMessage = () => {
-      if (websocket && input) {
-        websocket.send(input);
-        setInput('');
-      }
+  const { roomGuid } = useParams();
+  var roomOwner = false;
+
+  useEffect(() => {
+    const connect = new signalR.HubConnectionBuilder()
+      .withUrl("https://localhost:32772/wsHub", {
+        skipNegotiation: true,
+        transport: signalR.HttpTransportType.WebSockets
+      })
+      .withAutomaticReconnect()
+      .build();
+
+
+    connect.start()
+      .then(() => {console.log('Connected!'); joinRoom(connect);}).catch(err => console.log('Connection failed: ', err));
+
+    connect.on('ReceiveMessage', (message) => {
+      console.log('hoi')
+      setMessages(messages => [...messages, { message }]);
+    });
+    
+    setConnection(connect);
+    
+    return () => {
+      leaveRoom();
+      connect.stop().then(() => console.log('Disconnected!'));
     };
+  }, []);
+    
+
+  const joinRoom = async(connectc)=>{
+    if (connectc && connectc._connectionStarted) {
+      await connectc.send('JoinRoom', roomGuid);
+    }else{
+      console.log(connectc)
+    }
+  };
+  const leaveRoom = async()=>{
+    //console.log(connection);
+    if (connection && connection._connectionStarted) {
+      await connection.send('LeaveRoom', roomGuid);
+    }
+  };
+
+  const sendMessage = async () => {
+
+    console.log(connection);
+    if (connection && connection._connectionStarted) {
+      await connection.send('SendMessage', roomGuid, message);
+      setMessage('');
+    } else {
+      alert('No connection to server yet.');
+    }
+  };
+
+  return (
+    <div>
+      <input type="text" value={user} onChange={e => setUser(e.target.value)} placeholder="User" />
+      <input type="text" value={message} onChange={e => setMessage(e.target.value)} placeholder="Message" />
+      <button onClick={sendMessage}>Send</button>
+      <div>
+        {messages.map((msg, index) => (
+          <div key={index}>{msg.message}</div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default RecordPlaylist;

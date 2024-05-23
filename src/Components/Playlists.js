@@ -32,6 +32,7 @@ function Playlists({ss}){
               <Container className='mt-2'>
                 <Row>
                   <Col xs={6}>{data.playListName}</Col>
+                  <Col><Link to={"/playlist/room/"+crypto.randomUUID()}>CreateRecording</Link></Col>
                 </Row>
               </Container>
             );

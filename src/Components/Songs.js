@@ -5,6 +5,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { ShowContext } from './Context/ShowContext';
 
 function Songs({ ss }) {
+  const Api = process.env.REACT_APP_API_PATH
   const [songList, setSongList] = useState([]);
   const { selectedShow } = useContext(ShowContext);
   useEffect(() => {
@@ -14,7 +15,7 @@ function Songs({ ss }) {
   async function LoadSongList() {
     try {
       console.log(selectedShow.id);
-      const response = await fetch('https://localhost:32768/Song/fromshow?show=' + selectedShow.id);
+      const response = await fetch(Api+'/Song/fromshow?show=' + selectedShow.id);
       const jsonData = await response.json();
       setSongList(jsonData);
     } catch (error) {
