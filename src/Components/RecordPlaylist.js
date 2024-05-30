@@ -9,10 +9,11 @@ const RecordPlaylist = () => {
 
   const { roomGuid } = useParams();
   var roomOwner = false;
+  const Api = process.env.REACT_APP_API_PATH
 
   useEffect(() => {
     const connect = new signalR.HubConnectionBuilder()
-      .withUrl("https://localhost:32772/wsHub", {
+      .withUrl(Api+"/wsHub", {
         skipNegotiation: true,
         transport: signalR.HttpTransportType.WebSockets
       })
@@ -24,7 +25,6 @@ const RecordPlaylist = () => {
       .then(() => {console.log('Connected!'); joinRoom(connect);}).catch(err => console.log('Connection failed: ', err));
 
     connect.on('ReceiveMessage', (message) => {
-      console.log('hoi')
       setMessages(messages => [...messages, { message }]);
     });
     
