@@ -50,7 +50,7 @@ function Playlists({ss}){
               <Container className='mt-2'>
                 <Row>
                   <Col xs={6}>{data.playListName}</Col>
-                  <Col><Link to={"/playlist/room/"+crypto.randomUUID()}>CreateRecording</Link></Col>
+                  <Col><Link to={"/playlist/room/"+crypto.randomUUID()+"/"+ data.playListId}>CreateRecording</Link></Col>
                   <Col><Button onClick={() => handleDelete(data.playListId)} variant='primary' size="sm">
                   Delete
                   </Button></Col>
