@@ -2,41 +2,47 @@ import React, { useEffect, useState, useContext } from 'react';
 import * as signalR from '@microsoft/signalr';
 import { useParams } from 'react-router-dom';
 import { ShowContext } from './Context/ShowContext';
+import { Button, Row, Col, Container, Spinner, Card  } from 'react-bootstrap';
 
 const RecordPlaylist = () => {
   const [connection, setConnection] = useState(null);
   const [PlaylistStatusObject, setPlaylistStatusObject] = useState({});
   const [index, setIndex] = useState(0);
   const { selectedShow } = useContext(ShowContext);
-
   const [loading, setLoading] = useState(true);
   const [isConnected, setIsConnected] = useState(false);
-
-  const { roomGuid,playlistId  } = useParams();
-  var roomOwner = false;
-  const Api = process.env.REACT_APP_API_PATH
+  const { roomGuid, playlistId } = useParams();
+  const Api = process.env.REACT_APP_API_PATH;
 
   useEffect(() => {
     const connect = new signalR.HubConnectionBuilder()
-      .withUrl(Api+"/wsHub", {
+      .withUrl(`${Api}/wsHub`, {
         skipNegotiation: true,
         transport: signalR.HttpTransportType.WebSockets
       })
       .withAutomaticReconnect()
       .build();
 
-
     connect.start()
-      .then(() => {console.log('Connected!'); joinRoom(connect); setIsConnected(true);}).catch(err => console.log('Connection failed: ', err));
+      .then(() => {
+        console.log('Connected!');
+        joinRoom(connect);
+        setIsConnected(true);
+      })
+      .catch(err => console.log('Connection failed: ', err));
 
     connect.on('UpdateCurrentRoomstate', (object) => {
       setPlaylistStatusObject(object);
-      setLoading(false)
-      console.log(PlaylistStatusObject);
+      setLoading(false);
+      console.log(object);
     });
-    
+    connect.on('Host-SendCurrentRoomstate', () => {
+      console.log('hoi');
+      sendCurrentRoomStatus();
+    });
+
     setConnection(connect);
-    
+
     return () => {
       leaveRoom();
       setIsConnected(false);
@@ -53,59 +59,88 @@ const RecordPlaylist = () => {
     }
   }, [isConnected, index]);
 
-  const joinRoom = async(connectc)=>{
+  const joinRoom = async (connectc) => {
     if (connectc && connectc._connectionStarted) {
       await connectc.send('JoinRoom', roomGuid);
-    }else{
-      console.log(connectc)
+      await connectc.send('RequestCurrentRoomStatusFromHost', roomGuid);
+    } else {
+      console.log(connectc);
     }
   };
-  const leaveRoom = async()=>{
-    //console.log(connection);
+
+  const leaveRoom = async () => {
     if (connection && connection._connectionStarted) {
       await connection.send('LeaveRoom', roomGuid);
     }
   };
 
   const Move = async (moveAmount) => {
-    console.log(moveAmount)
-    setIndex(index+moveAmount);
+    console.log(moveAmount);
+    setIndex(index + moveAmount);
   };
 
   const sendCurrentRoomStatus = async () => {
-
     if (connection && connection._connectionStarted) {
-      console.log(roomGuid+ " + " +playlistId+" + "+selectedShow.id+" + " +index);
+      console.log(`${roomGuid} + ${playlistId} + ${selectedShow.id} + ${index}`);
       await connection.send('SendCurrentRoomStatus', roomGuid, Number(playlistId), selectedShow.id, index);
-      //setLoading(true);
     }
   };
-  return (loading)? (<p>loading</p>):(
-    <div >
-      <h2 className="text-center">{PlaylistStatusObject.recordingPlayListName}</h2>
-      <div class="h-100 d-flex align-items-center justify-content-center">
-      <p className="w-50 text-center">{PlaylistStatusObject.playListDescription}</p>
-      
 
-      </div>
-      <RecordPlaylistItemComponent discription={PlaylistStatusObject.currentItem.discription} index={PlaylistStatusObject.currentItem.itemIndex}/>
-      {PlaylistStatusObject.firstItem !== true && <button onClick={() => Move(-1)}>previous</button>}
-      {PlaylistStatusObject.lastItem !== true && <button onClick={() => Move(1)}>next</button>}
+  return (
+    <Container className="text-center mt-4">
+      {loading ? (
+        <Spinner animation="border" role="status">
+          
+        </Spinner>
+      ) : (
+        <>
+          <h2>{PlaylistStatusObject.recordingPlayListName}</h2>
+          <p>{PlaylistStatusObject.playListDescription}</p>
+          <div className="d-flex justify-content-center mb-3">
+            {PlaylistStatusObject.firstItem !== true && (
+              <Button onClick={() => Move(-1)} variant="primary" className="me-2">Previous</Button>
+            )}
+            {PlaylistStatusObject.lastItem !== true && (
+              <Button onClick={() => Move(1)} variant="primary">Next</Button>
+            )}
+          </div>
+          <RecordPlaylistItemComponent
+            song={PlaylistStatusObject.currentItem.song}
+            description={PlaylistStatusObject.currentItem.discription}
+            index={PlaylistStatusObject.currentItem.itemIndex}
+          />
+        </>
+      )}
+    </Container>
+  );
+};
+
+const RecordPlaylistItemComponent = (props) => {
+  return props.song != null ? (
+    <div>
+      <h2>Recording note {props.index}:</h2>
+      <p>{props.description}</p>
+      <SongComponent name={props.song.name} user_description={props.song.user_description} />
+    </div>
+  ) : (
+    <div>
+      <h2>Recording note {props.index}:</h2>
+      <p>{props.description}</p>
     </div>
   );
 };
 
-const RecordPlaylistItemComponent= (props)=>{
-
+const SongComponent = (props) => {
   return (
-    <div >
-      <h2 className="text-center">recording note {props.index}:</h2>
-      <p className="text-center">{props.discription}</p>
-    </div>
+    <Card className="text-center my-3" style={{ backgroundColor: '#f8f9fa' }}>
+      <Card.Body>
+        <Card.Title>Song name:</Card.Title>
+        <Card.Text>{props.name}</Card.Text>
+        <Card.Text>{props.user_description}</Card.Text>
+      </Card.Body>
+    </Card>
   );
-}
-const SongComponent=(props)=>{
-
-}
+};
 
 export default RecordPlaylist;
+

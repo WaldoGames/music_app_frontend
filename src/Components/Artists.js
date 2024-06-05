@@ -9,15 +9,16 @@ function Artists({ss}){
     const Api = process.env.REACT_APP_API_PATH
 
     useEffect(() => {
-
+        try {
         async function LoadArtistList(){
         const response = await fetch(Api+'/Artist?show='+ selectedShow.id);
         const jsonData = await response.json();
         let tmpdate=JSON.parse(JSON.stringify(jsonData))
         await setfirst(tmpdate);
         }
-    
         LoadArtistList();
+      } catch (error) {
+      }
     }, [selectedShow])
     
 
