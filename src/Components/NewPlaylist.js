@@ -13,6 +13,8 @@ const PlayListItemsForm = ({ name, description, onNameChange, onDescriptionChang
   const { user } = useAuth0();
   const [newDescription, setNewDescription] = useState('');
   const { control, setValue } = useForm();
+  const [error, setError]= useState(false);
+
   const navigate = useNavigate();
 
   const moveItem = (fromIndex, toIndex) => {
@@ -81,7 +83,7 @@ const PlayListItemsForm = ({ name, description, onNameChange, onDescriptionChang
   const loadOptions = async (inputValue) => {
     // Replace this with actual API call
     if(inputValue=="") return;
-    const response = await fetch(`${Api}/Song/search?search=${inputValue}`);
+    const response = await fetch(`${Api}/Song/search/${inputValue}/show/${selectedShow.id}`);
     const songs = await response.json();
     return songs.map(song => ({ value: song.id, label: song.name }));
   };

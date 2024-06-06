@@ -10,6 +10,8 @@ const HomePage = () => {
   const [componentToShow, setComponentToShow] = useState(null);
   const [dataLoaded, setDataLoaded] = useState(false); // New state variable
   const Api = process.env.REACT_APP_API_PATH
+  const [error, setError]= useState(false);
+
   useEffect(() => {
     fetchData();
   }, [isAuthenticated, user]);

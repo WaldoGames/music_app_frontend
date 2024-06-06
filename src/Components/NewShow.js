@@ -12,6 +12,7 @@ function NewShowForm(props) {
     const navigate = useNavigate();
     const { fetchShows } = useContext(ShowContext);
     const Api = process.env.REACT_APP_API_PATH
+    const [error, setError]= useState(false);
 
     const onSubmit = async (data) => {
       //try {
