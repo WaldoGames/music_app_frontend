@@ -39,7 +39,7 @@ const HomePage = () => {
   return (!isAuthenticated||isLoading||loading) ?  (<LoadingOrNotloggedin/>) : (
     shows.length === 0 ? (<NewShowForm Reload={reloadParent} />):(
       <div>
-        <h2 className=' m-3'>Welcome user</h2>
+        <h2 className=' m-3'>Welcome {user.name}</h2>
       </div>
     )
   );

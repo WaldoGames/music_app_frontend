@@ -3,6 +3,7 @@ import { Button, Row, Col, Container } from 'react-bootstrap';
 import { ShowContext } from './Context/ShowContext';
 import { Link } from 'react-router-dom';
 
+
 function Playlists({ss}){
 
     const [playlist, setPlaylist] = useState([])
@@ -39,6 +40,7 @@ function Playlists({ss}){
     }
 
     console.log(playlist);
+
     return (
       <>
         <Button className='btn-primary m-4 middle' as={Link} to="/playlists/new">create a new playlist</Button>

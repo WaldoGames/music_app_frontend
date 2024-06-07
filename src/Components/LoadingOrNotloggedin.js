@@ -6,7 +6,7 @@ import { Button } from 'react-bootstrap';
 const  LoadingOrNotloggedin =()=> {
     const {isAuthenticated} = useAuth0();
 
-    return (!isAuthenticated) ? <h1 className='m-3'>please login</h1>: <h1 className='m-3'>loading...</h1>
+    return (!isAuthenticated) ? <h1 className='m-3'>please login to continue</h1>: <h1 className='m-3'>loading...</h1>
 
 }
 export default LoadingOrNotloggedin
