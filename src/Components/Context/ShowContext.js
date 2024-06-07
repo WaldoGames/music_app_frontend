@@ -10,6 +10,7 @@ const ShowProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const { user, isAuthenticated, isLoading } = useAuth0();
+    
     const Api = process.env.REACT_APP_API_PATH
 
     useEffect(() => {

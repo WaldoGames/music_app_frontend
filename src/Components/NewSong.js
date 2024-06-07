@@ -15,7 +15,9 @@ function NewSong() {
     const [selectedArtists, setSelectedArtists] = useState([]);
     const { selectedShow } = useContext(ShowContext);
     const Api = process.env.REACT_APP_API_PATH
+    const [error, setError]= useState(false);
 
+    
     const navigate = useNavigate();
 
     const handleArtistChange = (selectedOptions) => {

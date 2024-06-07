@@ -5,20 +5,23 @@ function Artists({ss}){
 
     const [first, setfirst] = useState([])
     const { selectedShow } = useContext(ShowContext);
+    const [error, setError]= useState(false);
 
     const Api = process.env.REACT_APP_API_PATH
 
     useEffect(() => {
-        try {
+        
         async function LoadArtistList(){
-        const response = await fetch(Api+'/Artist?show='+ selectedShow.id);
-        const jsonData = await response.json();
-        let tmpdate=JSON.parse(JSON.stringify(jsonData))
-        await setfirst(tmpdate);
+          try {
+            const response = await fetch(Api+'/Artist?show='+ selectedShow.id);
+            const jsonData = await response.json();
+            let tmpdate=JSON.parse(JSON.stringify(jsonData))
+            await setfirst(tmpdate);
+          } catch (error) {
+            console.log("ERROR: " + error);
+          }
         }
         LoadArtistList();
-      } catch (error) {
-      }
     }, [selectedShow])
     
 

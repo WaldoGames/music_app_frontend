@@ -8,6 +8,8 @@ function Songs({ ss }) {
   const Api = process.env.REACT_APP_API_PATH
   const [songList, setSongList] = useState([]);
   const { selectedShow } = useContext(ShowContext);
+  const [error, setError]= useState(false);
+
   useEffect(() => {
     LoadSongList();
   }, [selectedShow]);
