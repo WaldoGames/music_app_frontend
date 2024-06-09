@@ -14,6 +14,7 @@ const HomePage = () => {
 
   useEffect(() => {
     fetchData();
+    console.log(isAuthenticated+' - '+isLoading+' - '+loading)
   }, [isAuthenticated, user]);
 
   const fetchData = async () => {

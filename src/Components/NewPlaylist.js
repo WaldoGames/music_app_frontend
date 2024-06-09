@@ -110,6 +110,7 @@ const PlayListItemsForm = ({ name, description, onNameChange, onDescriptionChang
       <h2>Reorderable Form</h2>
       <div style={{ marginBottom: '10px' }}>
         <input
+          data-cy="pl-name"
           type="text"
           value={name}
           onChange={(e) => onNameChange(e.target.value)}
@@ -117,6 +118,7 @@ const PlayListItemsForm = ({ name, description, onNameChange, onDescriptionChang
           style={styles.input}
         />
         <textarea
+          data-cy="pl-description"
           value={description}
           onChange={(e) => onDescriptionChange(e.target.value)}
           placeholder="Description"
@@ -137,6 +139,7 @@ const PlayListItemsForm = ({ name, description, onNameChange, onDescriptionChang
             style={styles.itemInput}
           />
           <Controller
+            data-cy="pl-item-select"
             name={`song-${index}`}
             control={control}
             render={({ value }) => (
@@ -157,15 +160,16 @@ const PlayListItemsForm = ({ name, description, onNameChange, onDescriptionChang
       ))}
       <div style={styles.addItemContainer}>
         <input
+          data-cy="pl-new-item-description"
           type="text"
           value={newDescription}
           onChange={(e) => setNewDescription(e.target.value)}
           placeholder="New Description"
           style={styles.itemInput}
         />
-        <button onClick={handleAddItem} style={styles.button}>Add Item</button>
+        <button data-cy="pl-new-item-button" onClick={handleAddItem} style={styles.button}>Add Item</button>
       </div>
-      <button onClick={Submit}>Print Data</button>
+      <button data-cy="pl-create" onClick={Submit}>Create new playlist</button>
     </div>
   );
 };

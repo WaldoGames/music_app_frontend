@@ -58,7 +58,7 @@ function Playlists({ss}){
     return (
       <>
         
-        <Button className='btn-primary m-4 middle' as={Link} to="/playlists/new">create a new playlist</Button>
+        <Button data-cy="playlistnew" className='btn-primary m-4 middle' as={Link} to="/playlists/new">create a new playlist</Button>
 
         {'playListItems' in playlist && playlist.playListItems.length > 0 ? (
           playlist.playListItems.map(function(data) {
