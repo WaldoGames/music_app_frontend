@@ -115,7 +115,7 @@ function NewSong() {
         </Form.Group>
 
 
-          <Button variant="primary" type="submit" className='mt-2'>
+          <Button data-cy="postNewSong" variant="primary" type="submit" className='mt-2'>
             Submit
           </Button>
         </Form>

@@ -1,6 +1,8 @@
 import React, { Component,useEffect,useState,useContext } from 'react';
 import { Button, Row, Col, Container } from 'react-bootstrap';
 import { ShowContext } from './Context/ShowContext';
+import DeleteButton from './test/DeleteButton';
+
 function Artists({ss}){
 
     const [first, setfirst] = useState([])
@@ -23,7 +25,6 @@ function Artists({ss}){
         }
         LoadArtistList();
     }, [selectedShow])
-    
 
     return (
       <>
@@ -32,8 +33,9 @@ function Artists({ss}){
             return (
               <Container className='mt-2'>
                 <Row>
-                  <Col xs={6}>Artist name: {data.name}</Col>
-                  <Col xs={6}>has been played {data.playedCount} times</Col>
+                  <Col xs={4}>Artist name: {data.name}</Col>
+                  <Col xs={4}>has been played {data.playedCount} times</Col>
+                  
                 </Row>
               </Container>
             );

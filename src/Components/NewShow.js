@@ -104,7 +104,6 @@ function NewShowForm(props) {
             <option value="Ukrainian">Ukrainian</option>
             <option value="Vietnamese">Vietnamese</option>
             <option value="Welsh">Welsh</option>
-            <option value="Sign language">Sign language</option>
             <option value="Algerian">Algerian</option>
             <option value="Aramaic">Aramaic</option>
             <option value="Armenian">Armenian</option>

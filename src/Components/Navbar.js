@@ -22,7 +22,7 @@ const Navbar=()=>{
                     <Link to="/artists">artists</Link>
                 </li>  
                 <li>
-                    <Link to="/songs">songs</Link>
+                    <Link data-cy="song" to="/songs">songs</Link>
                 </li>
                 <li>
                     <Link to="/shows">shows</Link>

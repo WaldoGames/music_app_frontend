@@ -7,6 +7,15 @@
   cy.get('#password').type('End2End@gmail.com')
   cy.get('button').contains('Continue').click()
 })*/
+describe('CreateAndDeleteSong', () => {
+  it('should create and delete a song', () => {
+    cy.loginToAuth0('End2End@gmail.com','End2End@gmail.com');
+    cy.createSong("epic song", "this is a epic song", "2001-06-13")
+    cy.deleteSong("epic song")
+    //cy.get('input#username').type(username)
+  });
+});
+
 
 describe('OAuth Login', () => {
   it('should log in via OAuth and store the token', () => {
@@ -20,6 +29,7 @@ describe('OAuth Login', () => {
     cy.get('[data-cy="pl-new-item-button"]').click()
     cy.get('#react-select-3-input').click()
     cy.get('#react-select-3-input').type("s")
+
     //cy.get('input#username').type(username)
   });
 });
