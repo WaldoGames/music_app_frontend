@@ -126,8 +126,9 @@ const PlayListItemsForm = ({ name, description, onNameChange, onDescriptionChang
         />
       </div>
       {items.map((item, index) => (
-        <div key={item.id} style={styles.itemContainer}>
+        <div data-cy={'playItem-'+index} key={item.id} style={styles.itemContainer}>
           <input
+            data-cy={'playItem-text-'+index}
             type="text"
             value={item.description}
             onChange={(e) => {
@@ -139,7 +140,7 @@ const PlayListItemsForm = ({ name, description, onNameChange, onDescriptionChang
             style={styles.itemInput}
           />
           <Controller
-            data-cy="pl-item-select"
+            data-cy={"pl-item-select-"+index}
             name={`song-${index}`}
             control={control}
             render={({ value }) => (
@@ -154,8 +155,8 @@ const PlayListItemsForm = ({ name, description, onNameChange, onDescriptionChang
               />
             )}
           />
-          <button onClick={() => handleMoveUp(index)} disabled={index === 0} style={styles.button}>↑</button>
-          <button onClick={() => handleMoveDown(index)} disabled={index === items.length - 1} style={styles.button}>↓</button>
+          <button data-cy={'playItem-up-'+index} onClick={() => handleMoveUp(index)} disabled={index === 0} style={styles.button}>↑</button>
+          <button data-cy={'playItem-down-'+index} onClick={() => handleMoveDown(index)} disabled={index === items.length - 1} style={styles.button}>↓</button>
         </div>
       ))}
       <div style={styles.addItemContainer}>

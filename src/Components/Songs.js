@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { ShowContext } from './Context/ShowContext';
 import DeleteButton from './test/DeleteButton';
+import ErrorComponent  from './ErrorComponent';
 
 function Songs({ ss }) {
   const Api = process.env.REACT_APP_API_PATH
@@ -22,6 +23,7 @@ function Songs({ ss }) {
       const jsonData = await response.json();
       setSongList(jsonData);
     } catch (error) {
+      setError(true);
       console.error('Error fetching song list:', error);
     }
   }
@@ -49,9 +51,16 @@ function Songs({ ss }) {
         console.log(error);
     }
   }
+  console.log(selectedShow)
+  if(error == true){
+    return <ErrorComponent/>
+  }
   return (
-    <>
-      <Button data-cy="songnew" className='btn-primary m-4 middle' as={Link} to="/songs/new">add new song</Button>
+    <> 
+
+      {(selectedShow!==null&&selectedShow!=='') && (
+        <Button data-cy="songnew" className='btn-primary m-4 middle' as={Link} to="/songs/new">add new song</Button>
+      )}
       {songList.length > 0 ? (
         songList.map(function (data) {
           const date = new Date(data.lastPlayed);
@@ -61,6 +70,7 @@ function Songs({ ss }) {
           const year = date.getFullYear();
           // Format the date as DD-MM-YYYY
           const formattedDate = `${day}-${month}-${year}`;
+
           return (
             <Container className='mt-2' key={data.key}>
               <Row className='mt-2'>
@@ -75,7 +85,7 @@ function Songs({ ss }) {
           );
         })
       ) : (
-        <div>No songs available</div> // This is the else block
+        <div className='mx-2'>No songs available</div> // This is the else block
       )}
     </>
   );

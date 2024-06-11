@@ -3,6 +3,7 @@ import { ShowContext } from './Context/ShowContext';
 import { Button, Row, Col, Container } from 'react-bootstrap';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Link } from 'react-router-dom';
+import ErrorComponent from './ErrorComponent';
 
 const  Shows =()=> {
 
@@ -19,7 +20,11 @@ const  Shows =()=> {
 
 }
 const ShowList=()=>{
-    const { fetchShows, loading, showCount, shows, SelectDiffrentShow } = useContext(ShowContext);
+    const { fetchShows, loading, showCount, shows, SelectDiffrentShow, error } = useContext(ShowContext);
+    if(error == true){
+        return <ErrorComponent/>
+      }
+
     return (
 <>      <Button className='btn-primary m-4 middle' as={Link} to="/shows/new">create a new show</Button>
         {shows.length > 0 ? (
@@ -35,7 +40,7 @@ const ShowList=()=>{
             );
             })
         ) : (
-            <div> no shows found... you should not be able to get where without shows.....</div> // This is the else block
+            <div className='mx-2'> no shows found</div> // This is the else block
         )}
         </>
     )

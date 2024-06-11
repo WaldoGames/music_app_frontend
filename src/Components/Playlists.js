@@ -21,6 +21,7 @@ function Playlists({ss}){
             const jsonData = await response.json();
             let tmpdate=JSON.parse(JSON.stringify(jsonData))
             await setPlaylist(tmpdate);
+
           } catch (error) {
             setError(true);
             console.log(error);
@@ -57,9 +58,10 @@ function Playlists({ss}){
     }
     return (
       <>
-        
+          {(selectedShow!==null&&selectedShow!=='') && (
         <Button data-cy="playlistnew" className='btn-primary m-4 middle' as={Link} to="/playlists/new">create a new playlist</Button>
-
+          )}
+        
         {'playListItems' in playlist && playlist.playListItems.length > 0 ? (
           playlist.playListItems.map(function(data) {
             console.log(data);
@@ -67,8 +69,8 @@ function Playlists({ss}){
               <Container className='mt-2'>
                 <Row>
                   <Col xs={6}>{data.playListName}</Col>
-                  <Col><Link to={"/playlist/room/"+crypto.randomUUID()+"/"+ data.playListId}>CreateRecording</Link></Col>
-                  <Col><Button onClick={() => handleDelete(data.playListId)} variant='primary' size="sm">
+                  <Col><Link  data-cy={"pl-run"} to={"/playlist/room/"+crypto.randomUUID()+"/"+ data.playListId}>CreateRecording</Link></Col>
+                  <Col><Button data-cy={"pl-delete"} onClick={() => handleDelete(data.playListId)} variant='primary' size="sm">
                   Delete
                   </Button></Col>
                 </Row>
@@ -76,7 +78,7 @@ function Playlists({ss}){
             );
           })
         ) : (
-          <div>No playlists available</div>
+          <div  className='mx-2'>No playlists available</div>
         )}
 
       </>

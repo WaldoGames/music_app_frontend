@@ -98,10 +98,10 @@ const RecordPlaylist = () => {
           <p>{PlaylistStatusObject.playListDescription}</p>
           <div className="d-flex justify-content-center mb-3">
             {PlaylistStatusObject.firstItem !== true && (
-              <Button onClick={() => Move(-1)} variant="primary" className="me-2">Previous</Button>
+              <Button data-cy={"pl-previous"} onClick={() => Move(-1)} variant="primary" className="me-2">Previous</Button>
             )}
             {PlaylistStatusObject.lastItem !== true && (
-              <Button onClick={() => Move(1)} variant="primary">Next</Button>
+              <Button data-cy={"pl-next"} onClick={() => Move(1)} variant="primary">Next</Button>
             )}
           </div>
           <RecordPlaylistItemComponent
@@ -119,20 +119,20 @@ const RecordPlaylistItemComponent = (props) => {
   return props.song != null ? (
     <div>
       <h2>Recording note {props.index}:</h2>
-      <p>{props.description}</p>
+      <p data-cy={"pl-description"}>{props.description}</p>
       <SongComponent name={props.song.name} user_description={props.song.user_description} />
     </div>
   ) : (
     <div>
       <h2>Recording note {props.index}:</h2>
-      <p>{props.description}</p>
+      <p data-cy={"pl-description"}>{props.description}</p>
     </div>
   );
 };
 
 const SongComponent = (props) => {
   return (
-    <Card className="text-center my-3" style={{ backgroundColor: '#f8f9fa' }}>
+    <Card data-cy={"pl-song"} className="text-center my-3" style={{ backgroundColor: '#f8f9fa' }}>
       <Card.Body>
         <Card.Title>Song name:</Card.Title>
         <Card.Text>{props.name}</Card.Text>

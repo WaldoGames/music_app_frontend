@@ -17,9 +17,13 @@ function Artists({ss}){
           try {
             const response = await fetch(Api+'/Artist?show='+ selectedShow.id);
             const jsonData = await response.json();
+            if(response.status==400){
+              throw error;
+            }
             let tmpdate=JSON.parse(JSON.stringify(jsonData))
             await setfirst(tmpdate);
           } catch (error) {
+            setError(true);
             console.log("ERROR: " + error);
           }
         }
@@ -41,7 +45,7 @@ function Artists({ss}){
             );
           })
         ) : (
-          <div>No artists available</div>
+          <div className='mx-2'>No artists available</div>
         )}
       </>
     );

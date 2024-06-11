@@ -20,6 +20,7 @@ const ShowProvider = ({ children }) => {
     }, [isAuthenticated, isLoading])
 
     const fetchShows = async () => {
+      setError(false);
       console.log(Api)
         try {
           setLoading(true);
@@ -34,7 +35,7 @@ const ShowProvider = ({ children }) => {
           
         } catch (error) {
             console.log(error)
-          setError(error);
+          setError(true);
         } finally {
           setLoading(false);
         }
