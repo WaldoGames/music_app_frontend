@@ -1,12 +1,4 @@
-/*beforeEach(() => {
-  cy.visit('localhost:3000/');
-  cy.log('I run before every test in every spec file!!!!!!')
-  cy.get('button').contains('login').click()
-  cy.wait(1000)
-  cy.get('id="username"').type('End2End@gmail.com')
-  cy.get('#password').type('End2End@gmail.com')
-  cy.get('button').contains('Continue').click()
-})*/
+
 describe('Create and delete song', () => {
   it('should create and delete a song', () => {
     cy.loginToAuth0('End2End@gmail.com','End2End@gmail.com');

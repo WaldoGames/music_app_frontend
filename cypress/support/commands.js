@@ -24,7 +24,7 @@ function createSong(songname, songdis, date){
   cy.get('[data-cy="song"]').click()
   cy.get('[data-cy="songnew"]').click()
   cy.get('#songName').type(songname)
-  cy.get('#discription').type(songdis)
+  cy.get('#description').type(songdis)
   cy.get('#releaseDate').type(date)
   cy.get('#react-select-3-input').click()
   cy.get('#react-select-3-input').type("t")
