@@ -4,10 +4,11 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
-import { Auth0Provider } from '@auth0/auth0-react';
+import { Auth0Provider, Auth0ProviderOptions} from '@auth0/auth0-react';
 
 const domain = process.env.REACT_APP_AUTH0_DOMAIN
 const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID
+const audience = process.env.REACT_APP_AUTH0_AUD
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -17,7 +18,12 @@ root.render(
       domain={domain}
       clientId={clientId}
       redirectUri={window.location.origin}
-      useRefreshTokens
+      authorizationParams={{
+        
+        audience: audience,
+        scope: 'openid profile email'
+      }}
+      //useRefreshTokens={true}
       cacheLocation="localstorage"
     >
 
