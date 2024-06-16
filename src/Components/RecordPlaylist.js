@@ -95,9 +95,15 @@ const RecordPlaylist = () => {
               connection.on('Host-Previous', (amount) => {
                 SetStateTryMoveBack(uuidv4());
               });
-          })
+          }) 
           .catch(e => console.log('Connection failed: ', e));
   }
+  return () => {
+    if (connection) {
+      leaveRoom(connection);
+      connection.off();
+    }
+  }; 
   }, [connection]);
 
   useEffect(() => {
@@ -137,6 +143,7 @@ const RecordPlaylist = () => {
       await connection.send('LeaveRoom', roomGuid);
     }
   };
+   
 
   const Move = async (moveAmount) => {
     await connection.send('MoveIndex', roomGuid, moveAmount);
@@ -178,11 +185,30 @@ const RecordPlaylist = () => {
             description={PlaylistStatusObject.currentItem.discription}
             index={PlaylistStatusObject.currentItem.itemIndex}
           />
+          <CopyButton/>
         </>
       )}
     </Container>
   );
 };
+
+const CopyButton= ()=>{
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(window.location.href)
+      .then(() => {
+        alert('URL copied to clipboard!');
+      })
+      .catch(err => {
+        alert('Failed to copy URL: ', err);
+      });
+  } 
+  return (
+    <Button onClick={()=>copyToClipboard()} variant="primary">
+      copy invite link
+    </Button>
+  );
+}
+
 
 const RecordPlaylistItemComponent = (props) => {
   return props.song != null ? (
