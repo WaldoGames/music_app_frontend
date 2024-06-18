@@ -76,9 +76,9 @@ function Songs({ ss }) {
               <Row className='mt-2'>
                 <Col data-cy="songNameCol">Song name: {data.name}</Col>
                 <Col>Last played: {formattedDate}</Col>
-                <Col>times played: {data.amountPlayed}</Col>
+                <Col>times played: <text data-cy="playedSongAmount">{data.amountPlayed}</text></Col>
                 <Col><PlaySongButton newstate={newstate} song_id={data.key} show_id={selectedShow.id} /></Col>
-                <Col><Link to={"/songs/edit/"+data.key}>Edit</Link></Col>
+                <Col><Link data-cy="songEdit" to={"/songs/edit/"+data.key}>Edit</Link></Col>
                 <Col><DeleteButton confirm={handleDelete} id={data.key} message={"Are you sure you want to delete this song? this will delete all related date including when the song has been played and all playlist which contain this song!"}>Edit</DeleteButton></Col>
               </Row>
             </Container>
@@ -116,7 +116,7 @@ function PlaySongButton({newstate,song_id, show_id}){
     };
 
   return <>
-  <Button onClick={onPress} variant='primary' size="sm">
+  <Button data-cy="playSong" onClick={onPress} variant='primary' size="sm">
   Play song
   </Button>
   </>

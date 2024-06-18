@@ -8,7 +8,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 function UpdateSong() {
   
-  const { register, handleSubmit, control, setValue } = useForm();
+  const { register, handleSubmit, control, setValue, formState: { errors } } = useForm();
   const [artists, setArtists] = useState([]);
   const [selectedArtists, setSelectedArtists] = useState([]);
   const { selectedShow } = useContext(ShowContext);
@@ -54,7 +54,7 @@ function UpdateSong() {
         const data = await response.json();
         // Pre-fill the form with existing song data
         setValue('songName', data.name);
-        setValue('discription', data.user_description);
+        setValue('description', data.user_description);
         setValue('releaseDate', data.release_date.substr(0, 10));
         // Set selected artists
         const selectedArtistsMaped = data.artists.map((artist) => ({
@@ -83,7 +83,7 @@ function UpdateSong() {
         body: JSON.stringify({
           id: id,
           name: data.songName,
-          user_description: data.discription,
+          user_description: data.description,
           creatorIds: selectedArtists.map(artist => artist.key),
           release_date: data.releaseDate,
           showId: selectedShow.id,
@@ -93,7 +93,7 @@ function UpdateSong() {
         console.error(JSON.stringify({
           id: id,
           name: data.songName,
-          user_description: data.discription,
+          user_description: data.description,
           creatorIds: selectedArtists.map(artist => artist.key),
           release_date: data.releaseDate,
           showId: selectedShow.id,
@@ -117,16 +117,18 @@ function UpdateSong() {
             {...register('songName', { required: 'Required' })}
             placeholder="Enter the song name"
           />
+          {errors.songName && <span data-cy={"song-required-name"} className='text-danger mx-2'>{errors.songName.message}</span>}
         </Form.Group>
 
-        <Form.Group controlId="discription">
+        <Form.Group controlId="description">
           <Form.Label>Description</Form.Label>
           <Form.Control
             type="text"
-            name="discription"
-            {...register('discription', { required: 'Required' })}
+            name="description"
+            {...register('description', { required: 'Required' })}
             placeholder="Description of the song. This will only be visible by you"
           />
+           {errors.description && <span data-cy={"song-required-description"} className='text-danger mx-2'>{errors.description.message}</span>}
         </Form.Group>
 
         <Form.Group controlId="releaseDate">
@@ -136,6 +138,7 @@ function UpdateSong() {
             name="releaseDate"
             {...register('releaseDate', { required: 'Required' })}
           />
+          {errors.releaseDate && <span span data-cy={"song-required-date"} className='text-danger mx-2'>{errors.releaseDate.message}</span>}
         </Form.Group>
 
         <Form.Group controlId="artists">
@@ -155,9 +158,10 @@ function UpdateSong() {
               />
             )}
           />
+          {errors.artists && <span span data-cy={"song-required-artists"} className='text-danger mx-2'>{errors.artists.message}</span>}
         </Form.Group>
 
-        <Button variant="primary" type="submit" className="mt-2">
+        <Button data-cy="PutSong"  variant="primary" type="submit" className="mt-2">
           Submit
         </Button>
       </Form>

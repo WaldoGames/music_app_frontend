@@ -1,13 +1,46 @@
 
-describe('Create and delete song', () => {
-  it('should create and delete a song', () => {
+describe('Create, update and delete song happy flow', () => {
+
+  beforeEach(() => {
     cy.loginToAuth0('End2End@gmail.com','End2End@gmail.com');
+  })
+
+  it('should create a song', () => {
+    
     cy.createSong("epic song", "this is a epic song", "2001-06-13")
-    cy.deleteSong("epic song")
-    //cy.get('input#username').type(username)
+
+  });
+
+  it('should playsong', ()=>{
+    cy.visit('localhost:3000/')
+    cy.get('[data-cy="song"]').click()
+    cy.get('[data-cy="playedSongAmount"]').should('contain.text', '0');
+    cy.get('[data-cy="playSong"]').click()
+    cy.get('[data-cy="playedSongAmount"]').should('contain.text', '1');
+  });
+
+  it('should update a song', () => {
+    
+    cy.updateSong("a not quite epic song", "this is a epic song", "2001-06-13")
+
+  });
+  
+  it('should delete a song', () => {
+    
+    cy.deleteSong("a not quite epic song")
+
   });
 });
 
+describe('Create and delete song but make mistake while creating the song', () => {
+  it('should create and delete a song', () => {
+    cy.loginToAuth0('End2End@gmail.com','End2End@gmail.com');
+    cy.createSongVarificationMistakes("epic song", "this is a epic song", "2001-06-13")
+    cy.deleteSong("epic song")
+  });
+});
+
+//createSongWithVarificationMistakes
 
 
 describe('Create and delete playlist', () => {

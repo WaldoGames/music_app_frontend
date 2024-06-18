@@ -20,6 +20,7 @@ const ShowProvider = ({ children }) => {
     }, [isAuthenticated, isLoading])
 
     const fetchShows = async () => {
+
       setError(false);
       console.log(Api)
         try {
@@ -31,6 +32,8 @@ const ShowProvider = ({ children }) => {
           if (data.length > 0) {
             setSelectedShow(data[0]); // Set the first item as active'
             SetShowCount(data.length);
+          }else{
+            setSelectedShow('');
           }
           
         } catch (error) {

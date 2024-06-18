@@ -10,13 +10,13 @@ import { ShowContext } from './Context/ShowContext';
 const Navbar=()=>{
 
     const {isAuthenticated} = useAuth0();
-    const { fetchShows, loading, showCount, shows, SelectDiffrentShow } = useContext(ShowContext);
-
+    const { fetchShows, loading, showCount, shows, SelectDiffrentShow, selectedShow } = useContext(ShowContext);
+    console.log("SHO3 "+selectedShow);
     return( <nav className="navbar">
     <Link to="/" className="navbar-title"> Logo </Link>
-    
 
-            {isAuthenticated &&
+
+            {(isAuthenticated && selectedShow!='') &&
             <ul>
                 <li>
                     <Link to="/artists">artists</Link>

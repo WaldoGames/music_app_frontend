@@ -50,10 +50,7 @@ function NewSong() {
       };
 
     const onSubmit = async (data) => {
-      //try {
-
       try {
-        // Perform POST request
         const response = await fetch(Api+'/Song', {
           method: 'POST',
           headers: {
@@ -79,7 +76,7 @@ function NewSong() {
   
     return (
       <div className='m-3'>
-<Form className='mt-3' onSubmit={handleSubmit(onSubmit)}>
+      <Form className='mt-3' onSubmit={handleSubmit(onSubmit)}>
         <Form.Group controlId="songName">
           <Form.Label>Song name</Form.Label>
           <Form.Control 
@@ -88,7 +85,7 @@ function NewSong() {
             {...register("songName", { required: "Required" })} 
             placeholder="Enter the song name" 
           />
-          {errors.songName && <span className='text-danger mx-2'>{errors.songName.message}</span>}
+          {errors.songName && <span data-cy={"song-required-name"} className='text-danger mx-2'>{errors.songName.message}</span>}
         </Form.Group>
     
         <Form.Group controlId="description">
@@ -99,7 +96,7 @@ function NewSong() {
             {...register("description", { required: "Required" })} 
             placeholder="Description of the song. This will only be visible by you" 
           />
-          {errors.description && <span className='text-danger mx-2'>{errors.description.message}</span>}
+          {errors.description && <span data-cy={"song-required-description"} className='text-danger mx-2'>{errors.description.message}</span>}
         </Form.Group>
     
         <Form.Group controlId="releaseDate">
@@ -109,7 +106,7 @@ function NewSong() {
             name="releaseDate" 
             {...register("releaseDate", { required: "Required" })} 
           />
-          {errors.releaseDate && <span className='text-danger mx-2'>{errors.releaseDate.message}</span>}
+          {errors.releaseDate && <span span data-cy={"song-required-date"} className='text-danger mx-2'>{errors.releaseDate.message}</span>}
         </Form.Group>
     
         <Form.Group controlId="artists">
@@ -134,7 +131,7 @@ function NewSong() {
               />
             )}
           />
-          {errors.artists && <span className='text-danger mx-2'>{errors.artists.message}</span>}
+          {errors.artists && <span span data-cy={"song-required-artists"} className='text-danger mx-2'>{errors.artists.message}</span>}
         </Form.Group>
     
         <Button data-cy="postNewSong" variant="primary" type="submit" className='mt-2'>
