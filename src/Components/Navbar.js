@@ -25,7 +25,7 @@ const Navbar=()=>{
                     <Link data-cy="song" to="/songs">songs</Link>
                 </li>
                 <li>
-                    <Link to="/shows">shows</Link>
+                    <Link data-cy="show" to="/shows">shows</Link>
                 </li>
                 <li>
                     <Link data-cy="playlist" to="/playlists">playlists</Link>

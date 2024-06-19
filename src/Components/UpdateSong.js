@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Spinner } from 'react-bootstrap';
 import AsyncSelect from 'react-select/async';
 import NewArtist from './NewArtist';
 import { ShowContext } from './Context/ShowContext';
@@ -16,6 +16,7 @@ function UpdateSong() {
   const { id } = useParams();
   const Api = process.env.REACT_APP_API_PATH
   const [error, setError]= useState(false);
+  const [isLoading, SetIsLoading]=useState(true);
 
   const handleArtistChange = (selectedOptions) => {
     setSelectedArtists(selectedOptions);
@@ -70,6 +71,7 @@ function UpdateSong() {
       }
     };
     fetchData();
+    SetIsLoading(false);
   }, [id, setValue]);
 
   const onSubmit = async (data) => {
@@ -105,8 +107,9 @@ function UpdateSong() {
       navigate('/songs');
     }
   };
+ 
 
-  return (
+  return (isLoading) ?  (<div className="text-center mt-4"><Spinner /></div>) : (
     <div className="m-3">
       <Form className="mt-3" onSubmit={handleSubmit(onSubmit)}>
         <Form.Group controlId="songName">

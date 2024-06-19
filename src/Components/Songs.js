@@ -51,7 +51,7 @@ function Songs({ ss }) {
         console.log(error);
     }
   }
-  console.log(selectedShow)
+
   if(error == true){
     return <ErrorComponent/>
   }
@@ -79,7 +79,7 @@ function Songs({ ss }) {
                 <Col>times played: <text data-cy="playedSongAmount">{data.amountPlayed}</text></Col>
                 <Col><PlaySongButton newstate={newstate} song_id={data.key} show_id={selectedShow.id} /></Col>
                 <Col><Link data-cy="songEdit" to={"/songs/edit/"+data.key}>Edit</Link></Col>
-                <Col><DeleteButton confirm={handleDelete} id={data.key} message={"Are you sure you want to delete this song? this will delete all related date including when the song has been played and all playlist which contain this song!"}>Edit</DeleteButton></Col>
+                <Col><DeleteButton confirm={handleDelete} id={data.key} message={"Are you sure you want to delete this song? this will delete all related date including when the song has been played and all playlist which contain this song!"}>Delete</DeleteButton></Col>
               </Row>
             </Container>
           );

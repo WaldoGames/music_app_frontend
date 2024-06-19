@@ -1,3 +1,55 @@
+describe('Create and delete show', () => {
+  beforeEach(() => {
+    cy.loginToAuth0('End2End@gmail.com','End2End@gmail.com');
+    cy.visit('localhost:3000/');
+  })
+  it('should Check if show can be deleted', () => {
+    cy.get('[data-cy="show"]').click()
+    cy.get('[data-cy="show-name"]').should('exist'); 
+    cy.get('[data-cy="show-delete"]').should('not.exist'); 
+  });
+  it('should Fail to create a Show', () => {
+    cy.get('[data-cy="show"]').click();
+    cy.get('[data-cy="show-new"]').click();
+    cy.get('[data-cy="show-required-name"]').should('not.exist');
+    cy.get('[data-cy="show-required-Description"]').should('not.exist');
+    cy.get('[data-cy="show-required-showLanguage"]').should('not.exist');
+    cy.get('[data-cy="show-submit"]').click();
+    cy.get('[data-cy="show-required-name"]').should('exist');
+    cy.get('[data-cy="show-required-Description"]').should('exist');
+    cy.get('[data-cy="show-required-showLanguage"]').should('exist'); 
+    cy.get('[data-cy="show"]').click();
+    cy.get('[data-cy="show-name"]').should('not.contain.text', 'MyNewShow');
+  });
+
+  it('should Create a Show', () => {
+    cy.get('[data-cy="show"]').click();
+    cy.get('[data-cy="show-new"]').click();
+
+    cy.get('#showName').type('MyNewShow')
+    cy.get('#showDescription').type('MyNewShowDis')
+    cy.get('[data-cy="show-l"]').select('English');
+    cy.get('[data-cy="show-submit"]').click();
+    
+  });
+  it('should check if show exists', () => {
+    cy.get('[data-cy="show"]').click();
+    cy.get('[data-cy="show-name"]').should('contain.text', 'MyNewShow');
+  });
+  it('should deleteshow', () => {
+    cy.get('[data-cy="show"]').click();
+    cy.get('[data-cy="show-name"]').should('contain.text', 'MyNewShow');
+
+    cy.on('window:confirm', (message) => {
+      return true;
+    });
+
+    cy.get('[data-cy="delete"]').eq(1).click();
+    cy.get('[data-cy="show-name"]').should('exist'); 
+    cy.get('[data-cy="delete"]').should('not.exist'); 
+
+  });
+});
 
 describe('Create, update and delete song happy flow', () => {
 
@@ -40,11 +92,27 @@ describe('Create and delete song but make mistake while creating the song', () =
   });
 });
 
-//createSongWithVarificationMistakes
-
-
 describe('Create and delete playlist', () => {
-  it('should log in via OAuth and store the token', () => {
+  it('should fail to playlist', () => {
+    cy.loginToAuth0('End2End@gmail.com','End2End@gmail.com');
+    cy.visit('localhost:3000/');
+    cy.get('[data-cy="playlist"]').click()
+    cy.get('[data-cy="playlistnew"]').click()
+    cy.get('[data-cy="playlist-required-name"]').should('not.exist');
+    cy.get('[data-cy="playlist-required-description"]').should('not.exist');
+    cy.get('[data-cy="playlist-required-items"]').should('not.exist'); 
+    cy.get('[data-cy="pl-create"]').click()
+    cy.get('[data-cy="playlist-required-name"]').should('exist');
+    cy.get('[data-cy="playlist-required-description"]').should('exist');
+    cy.get('[data-cy="playlist-required-items"]').should('not.exist'); 
+    cy.get('[data-cy="pl-name"]').type("EndToEnd play list")
+    cy.get('[data-cy="pl-description"]').type("EndToEnd play list description")
+    cy.get('[data-cy="pl-create"]').click()
+    cy.get('[data-cy="playlist-required-name"]').should('not.exist');
+    cy.get('[data-cy="playlist-required-description"]').should('not.exist');
+    cy.get('[data-cy="playlist-required-items"]').should('exist'); 
+  });
+  it('create, check and delete playlist', () => {
     cy.loginToAuth0('End2End@gmail.com','End2End@gmail.com');
     cy.createSong("epic song", "this is a epic song", "2001-06-13")
     cy.visit('localhost:3000/');
@@ -80,6 +148,8 @@ describe('Create and delete playlist', () => {
     //cy.get('input#username').type(username) pl-song
   });
 });
+
+
 
 /*describe('template spec 2', () => {
   it('passes', () => {
