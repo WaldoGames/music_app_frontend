@@ -6,12 +6,13 @@ import React, { Component,useEffect,useState,useContext } from 'react';
 import { ShowContext } from './Context/ShowContext';
 
 function NewShowForm(props) {
-    const { register, handleSubmit, reset, control, setValue } = useForm();
+    const { register, handleSubmit, reset, control, setValue, formState: { errors } } = useForm();
     const { user, isAuthenticated, isLoading } = useAuth0();
     const { Reload } = props;
     const navigate = useNavigate();
     const { fetchShows } = useContext(ShowContext);
     const Api = process.env.REACT_APP_API_PATH
+    const [error, setError]= useState(false);
 
     const onSubmit = async (data) => {
       //try {
@@ -23,7 +24,7 @@ function NewShowForm(props) {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ show_name: data.showName, show_discription: data.showDiscription, show_language: data.showLanguage, auth_sub: user.sub}),
+          body: JSON.stringify({ show_name: data.showName, show_discription: data.showDescription, show_language: data.showLanguage, auth_sub: user.sub}),
         });
         
         if (!response.ok) {
@@ -49,17 +50,17 @@ function NewShowForm(props) {
           <Form.Label>Show name</Form.Label>
           <Form.Control type="text" name="showName" {...register("showName", {required: "Required", })} placeholder="Enter the show name" />
         </Form.Group>
-  
-        <Form.Group controlId="showDiscription">
-          <Form.Label>discription</Form.Label>
-          <Form.Control type="text" name="showDiscription" {...register("showDiscription", {required: "Required", })} placeholder="discription of the show"/>
+        {errors.showName && <span data-cy={"show-required-name"} className='text-danger mx-2'>{errors.showName.message}</span>}
+        <Form.Group controlId="showDescription">
+          <Form.Label>Description</Form.Label>
+          <Form.Control type="text" name="showDescription" {...register("showDescription", {required: "Required", })} placeholder="Description of the show"/>
         </Form.Group>
-  
+        {errors.showDescription && <span data-cy={"show-required-Description"} className='text-danger mx-2'>{errors.showName.message}</span>}
         <Form.Group controlId="showLanguage">
           <Form.Label>Language</Form.Label>
-          <Form.Control as="select" name="showLanguage" {...register("showLanguage", { required: "Required" })}>
+          <Form.Control data-cy="show-l" as="select" name="showLanguage" {...register("showLanguage", { required: "showDescription" })}>
             <option value="">Select a language...</option>
-            <option value="English">English</option>
+            <option data-cy="show-le" value="English">English</option>
             <option value="Dutch">Dutch</option>
             <option value="Afrikaans">Afrikaans</option>
             <option value="Arabic">Arabic</option>
@@ -103,7 +104,6 @@ function NewShowForm(props) {
             <option value="Ukrainian">Ukrainian</option>
             <option value="Vietnamese">Vietnamese</option>
             <option value="Welsh">Welsh</option>
-            <option value="Sign language">Sign language</option>
             <option value="Algerian">Algerian</option>
             <option value="Aramaic">Aramaic</option>
             <option value="Armenian">Armenian</option>
@@ -138,9 +138,10 @@ function NewShowForm(props) {
             <option value="Wu">Wu</option>
           </Form.Control> 
         </Form.Group>
+        {errors.showLanguage && <span data-cy={"show-required-showLanguage"} className='text-danger mx-2'>{errors.showLanguage.message}</span>}
+        <br></br>
 
-
-        <Button variant="primary" type="submit" className='mt-2'>
+        <Button data-cy="show-submit" variant="primary" type="submit" className='mt-2'>
           Submit
         </Button>
       </Form>

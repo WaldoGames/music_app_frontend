@@ -10,6 +10,7 @@ const ShowProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const { user, isAuthenticated, isLoading } = useAuth0();
+    
     const Api = process.env.REACT_APP_API_PATH
 
     useEffect(() => {
@@ -19,6 +20,8 @@ const ShowProvider = ({ children }) => {
     }, [isAuthenticated, isLoading])
 
     const fetchShows = async () => {
+
+      setError(false);
       console.log(Api)
         try {
           setLoading(true);
@@ -29,11 +32,13 @@ const ShowProvider = ({ children }) => {
           if (data.length > 0) {
             setSelectedShow(data[0]); // Set the first item as active'
             SetShowCount(data.length);
+          }else{
+            setSelectedShow('');
           }
           
         } catch (error) {
             console.log(error)
-          setError(error);
+          setError(true);
         } finally {
           setLoading(false);
         }

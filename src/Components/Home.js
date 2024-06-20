@@ -10,8 +10,11 @@ const HomePage = () => {
   const [componentToShow, setComponentToShow] = useState(null);
   const [dataLoaded, setDataLoaded] = useState(false); // New state variable
   const Api = process.env.REACT_APP_API_PATH
+  const [error, setError]= useState(false);
+
   useEffect(() => {
     fetchData();
+    console.log(isAuthenticated+' - '+isLoading+' - '+loading)
   }, [isAuthenticated, user]);
 
   const fetchData = async () => {
@@ -39,7 +42,7 @@ const HomePage = () => {
   return (!isAuthenticated||isLoading||loading) ?  (<LoadingOrNotloggedin/>) : (
     shows.length === 0 ? (<NewShowForm Reload={reloadParent} />):(
       <div>
-        <h2 className=' m-3'>Welcome user</h2>
+        <h2 className=' m-3'>Welcome {user.name}</h2>
       </div>
     )
   );

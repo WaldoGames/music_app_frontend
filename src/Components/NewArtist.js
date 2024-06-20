@@ -1,25 +1,18 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-class NewArtist extends Component {
+const NewArtist = ()=>{
+  const [error, setError]= useState(false);
+  const [artistName, setArtistName] = useState('');
+ 
+  const handleChange = (event) => {
+    setArtistName(event.target.value);
+  };
 
-     constructor(props) {
-    super(props);
-    this.state = {
-      artistName: '',
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-  
-  handleChange(event) {
-    const { name, value } = event.target;
-    this.setState({ [name]: value });
-  }
-
-  async handleSubmit(event) {
-    const Api = process.env.REACT_APP_API_PATH
+  const handleSubmit=async (event) => {
+    
+    const Api = process.env.REACT_APP_API_PATH;
     event.preventDefault();
     // Do whatever you want with the names here
     try {
@@ -29,7 +22,7 @@ class NewArtist extends Component {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ artistName: this.state.artistName}),
+          body: JSON.stringify({ artistName: artistName}),
         });
         
         if (!response.ok) {
@@ -40,24 +33,24 @@ class NewArtist extends Component {
       } catch (error) {
         console.error('Error:', error);
       } finally{
-        this.setState({ artistName: ''});
+        setArtistName('');
       }
     };
     // Reset the input fields
     
   
 
-  render() {
+
     return (
     <div className='form-group'>
-      <Form onSubmit={this.handleSubmit}>
+      <Form onSubmit={handleSubmit}>
         <Form.Group controlId="artistName">
           <Form.Label>Artist Name</Form.Label>
           <Form.Control
             type="text"
             name="artistName"
-            value={this.state.artistName}
-            onChange={this.handleChange}
+            value={artistName}
+            onChange={handleChange}
             placeholder="Enter the artists name"
           />
         </Form.Group>
@@ -67,7 +60,6 @@ class NewArtist extends Component {
       </Form>
     </div>
     );
-  }
 }
 
 export default NewArtist;

@@ -10,12 +10,14 @@ import NewArtist from './NewArtist';
 
 
 function NewSong() {
-    const { register, handleSubmit, reset, control, setValue } = useForm();
+    const { register, handleSubmit, reset, control, setValue, formState: { errors }} = useForm();
     const [artists, setArtists] = useState([]);
     const [selectedArtists, setSelectedArtists] = useState([]);
     const { selectedShow } = useContext(ShowContext);
     const Api = process.env.REACT_APP_API_PATH
+    const [error, setError]= useState(false);
 
+    
     const navigate = useNavigate();
 
     const handleArtistChange = (selectedOptions) => {
@@ -48,16 +50,13 @@ function NewSong() {
       };
 
     const onSubmit = async (data) => {
-      //try {
-
       try {
-        // Perform POST request
         const response = await fetch(Api+'/Song', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ name: data.songName, user_description: data.discription, creatorIds: data.artists, release_date: data.releaseDate, showId: selectedShow.id}),
+          body: JSON.stringify({ name: data.songName, user_description: data.description, creatorIds: data.artists, release_date: data.releaseDate, showId: selectedShow.id}),
         });
         
         if (!response.ok) {
@@ -77,46 +76,68 @@ function NewSong() {
   
     return (
       <div className='m-3'>
-        <Form className='mt-3' onSubmit={handleSubmit(onSubmit)}>
-          <Form.Group controlId="songName">
-            <Form.Label>Song name</Form.Label>
-            <Form.Control type="text" name="songName" {...register("songName", {required: "Required", })} placeholder="Enter the song name" />
-          </Form.Group>
+      <Form className='mt-3' onSubmit={handleSubmit(onSubmit)}>
+        <Form.Group controlId="songName">
+          <Form.Label>Song name</Form.Label>
+          <Form.Control 
+            type="text" 
+            name="songName" 
+            {...register("songName", { required: "Required" })} 
+            placeholder="Enter the song name" 
+          />
+          {errors.songName && <span data-cy={"song-required-name"} className='text-danger mx-2'>{errors.songName.message}</span>}
+        </Form.Group>
     
-          <Form.Group controlId="discription">
-            <Form.Label>discription</Form.Label>
-            <Form.Control type="text" name="discription" {...register("discription", {required: "Required", })} placeholder="discription of the song. this will only be visible by you" />
-          </Form.Group>
+        <Form.Group controlId="description">
+          <Form.Label>Description</Form.Label>
+          <Form.Control 
+            type="text" 
+            name="description" 
+            {...register("description", { required: "Required" })} 
+            placeholder="Description of the song. This will only be visible by you" 
+          />
+          {errors.description && <span data-cy={"song-required-description"} className='text-danger mx-2'>{errors.description.message}</span>}
+        </Form.Group>
     
-          <Form.Group controlId="releaseDate">
-            <Form.Label>Date</Form.Label>
-            <Form.Control type="date" name="releaseDate" {...register("releaseDate", {required: "Required", })} />
-          </Form.Group>
+        <Form.Group controlId="releaseDate">
+          <Form.Label>Date</Form.Label>
+          <Form.Control 
+            type="date" 
+            name="releaseDate" 
+            {...register("releaseDate", { required: "Required" })} 
+          />
+          {errors.releaseDate && <span span data-cy={"song-required-date"} className='text-danger mx-2'>{errors.releaseDate.message}</span>}
+        </Form.Group>
     
-          <Form.Group controlId="artists">
+        <Form.Group controlId="artists">
           <Form.Label>Artists</Form.Label>
           <Controller
             name="artists"
             control={control}
-            render={({ onChange, onBlur, value }) => (
+            rules={{ validate: value => value && value.length > 0 || 'At least one artist must be selected' }}
+            render={({ field, onChange, onBlur, value  }) => (
               <AsyncSelect
+                {...field}
                 cacheOptions
                 defaultOptions
                 isMulti
-                onChange={handleArtistChange}
                 loadOptions={loadOptions}
-                value={selectedArtists}
                 placeholder="Select artists"
+                value={selectedArtists}
+                onChange={(selected) => {
+                  field.onChange(selected);
+                  handleArtistChange(selected);
+                }}
               />
             )}
           />
+          {errors.artists && <span span data-cy={"song-required-artists"} className='text-danger mx-2'>{errors.artists.message}</span>}
         </Form.Group>
-
-
-          <Button variant="primary" type="submit" className='mt-2'>
-            Submit
-          </Button>
-        </Form>
+    
+        <Button data-cy="postNewSong" variant="primary" type="submit" className='mt-2'>
+          Submit
+        </Button>
+      </Form>
       <div  className=" mt-5">
       <p class="text-muted">   
          can't find the artist your looking for? add a new one here:
