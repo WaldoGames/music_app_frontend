@@ -30,6 +30,7 @@ describe('Create and delete show', () => {
     cy.get('#showDescription').type('MyNewShowDis')
     cy.get('[data-cy="show-l"]').select('English');
     cy.get('[data-cy="show-submit"]').click();
+    cy.get('[data-cy="show"]').click();
     
   });
   it('should check if show exists', () => {

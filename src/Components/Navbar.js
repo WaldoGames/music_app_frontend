@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, Image } from 'react';
 import { Link } from "react-router-dom"
 import LoginButton from "./Auth0/LoginButton"
 import LogoutButton from "./Auth0/LogoutButton"
@@ -13,7 +13,11 @@ const Navbar=()=>{
     const { fetchShows, loading, showCount, shows, SelectDiffrentShow, selectedShow } = useContext(ShowContext);
     console.log("SHO3 "+selectedShow);
     return( <nav className="navbar">
-    <Link to="/" className="navbar-title"> Logo </Link>
+
+    <Link to="/" className="navbar-title"> <img
+        src={`${process.env.PUBLIC_URL}/logo.png`}
+        style={styles.logo}
+    /> </Link>
 
 
             {(isAuthenticated && selectedShow!='') &&
@@ -51,4 +55,13 @@ const Navbar=()=>{
     </nav>
     )
 }
+
+const styles = {
+    logo: {
+      width: 40,
+      height: 40,
+      marginRight: 10,
+    },
+  };
+  
 export default Navbar;
